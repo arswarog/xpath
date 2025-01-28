@@ -7,7 +7,7 @@ import { invert } from 'lodash';
 
 const b = block(styles, 'Keyboard');
 
-const buttonCodes: Record<string, ButtonCode> = invert(ButtonCode);
+const buttonCodes = invert(ButtonCode) as Record<string, ButtonCode>;
 
 export interface IKeyboardProps {
     onClick?: (value: ButtonCode) => void;
