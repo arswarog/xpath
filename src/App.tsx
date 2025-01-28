@@ -3,7 +3,7 @@ import { SiteTitle } from './components/SiteTitle.tsx';
 import { CalculatorUI } from './components/CalculatorUI.tsx';
 import { useCalc } from './hooks/useCalc.ts';
 
-function App() {
+export function App() {
     const { display, onChange } = useCalc();
     return (
         <>
@@ -15,5 +15,3 @@ function App() {
         </>
     );
 }
-
-export default App;
