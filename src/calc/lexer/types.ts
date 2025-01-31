@@ -1,7 +1,7 @@
 export enum TokenType {
     UnknownSymbol,
     Space,
-    DecimalValue,
+    NumericLiteral,
     Operation,
 }
 

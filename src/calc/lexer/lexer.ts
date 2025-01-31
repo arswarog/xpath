@@ -10,7 +10,7 @@ export function analyzeCode(code: string): Token[] {
 
     let index = 0;
     let buffer = '';
-    let tokenType = TokenType.DecimalValue;
+    let tokenType = TokenType.NumericLiteral;
 
     do {
         const char = code[index];
@@ -58,7 +58,7 @@ const tokenDeclarations: { type: TokenType; chars: string }[] = [
         chars: ' ',
     },
     {
-        type: TokenType.DecimalValue,
+        type: TokenType.NumericLiteral,
         chars: '0123456789',
     },
     {

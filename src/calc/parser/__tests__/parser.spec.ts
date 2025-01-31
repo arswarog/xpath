@@ -14,7 +14,9 @@ describe('Parser', () => {
             const ast = parse(source);
 
             // Assert
-            expect(ast).toEqual(new RootNode(new ValueNode('12'), source));
+            expect(ast).toEqual(
+                new RootNode(new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)), source),
+            );
         });
         it('12+34', () => {
             // Arrange
@@ -28,8 +30,8 @@ describe('Parser', () => {
                 new RootNode(
                     new BinaryExpressionNode(
                         createToken(TokenType.Operation, '+', 2),
-                        new ValueNode('12'),
-                        new ValueNode('34'),
+                        new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)),
+                        new ValueNode(createToken(TokenType.NumericLiteral, '34', 3)),
                     ),
                     source,
                 ),
@@ -49,10 +51,10 @@ describe('Parser', () => {
                         createToken(TokenType.Operation, '+', 4),
                         new BinaryExpressionNode(
                             createToken(TokenType.Operation, '-', 2),
-                            new ValueNode('12'),
-                            new ValueNode('5'),
+                            new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)),
+                            new ValueNode(createToken(TokenType.NumericLiteral, '5', 3)),
                         ),
-                        new ValueNode('34'),
+                        new ValueNode(createToken(TokenType.NumericLiteral, '34', 6)),
                     ),
                     source,
                 ),
@@ -72,10 +74,10 @@ describe('Parser', () => {
                         createToken(TokenType.Operation, '+', 4),
                         new BinaryExpressionNode(
                             createToken(TokenType.Operation, '*', 2),
-                            new ValueNode('12'),
-                            new ValueNode('5'),
+                            new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)),
+                            new ValueNode(createToken(TokenType.NumericLiteral, '5', 3)),
                         ),
-                        new ValueNode('34'),
+                        new ValueNode(createToken(TokenType.NumericLiteral, '34', 6)),
                     ),
                     source,
                 ),
@@ -93,11 +95,11 @@ describe('Parser', () => {
                 new RootNode(
                     new BinaryExpressionNode(
                         createToken(TokenType.Operation, '+', 2),
-                        new ValueNode('12'),
+                        new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)),
                         new BinaryExpressionNode(
                             createToken(TokenType.Operation, '/', 5),
-                            new ValueNode('35'),
-                            new ValueNode('5'),
+                            new ValueNode(createToken(TokenType.NumericLiteral, '35', 3)),
+                            new ValueNode(createToken(TokenType.NumericLiteral, '5', 6)),
                         ),
                     ),
                     source,

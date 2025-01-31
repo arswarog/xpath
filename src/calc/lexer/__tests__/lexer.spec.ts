@@ -10,11 +10,11 @@ describe('Lexer', () => {
     describe('TokenTypes', () => {
         describe('DecimalValue', () => {
             it('1 char', () => {
-                expect(analyzeCode('3')).toEqual([createToken(TokenType.DecimalValue, '3', 0)]);
+                expect(analyzeCode('3')).toEqual([createToken(TokenType.NumericLiteral, '3', 0)]);
             });
             it('many chars', () => {
                 expect(analyzeCode('1234567890')).toEqual([
-                    createToken(TokenType.DecimalValue, '1234567890', 0),
+                    createToken(TokenType.NumericLiteral, '1234567890', 0),
                 ]);
             });
         });
@@ -27,9 +27,9 @@ describe('Lexer', () => {
             });
             it('mixed', () => {
                 expect(analyzeCode('12ΨΩ3Θ')).toEqual([
-                    createToken(TokenType.DecimalValue, '12', 0),
+                    createToken(TokenType.NumericLiteral, '12', 0),
                     createToken(TokenType.UnknownSymbol, 'ΨΩ', 2),
-                    createToken(TokenType.DecimalValue, '3', 4),
+                    createToken(TokenType.NumericLiteral, '3', 4),
                     createToken(TokenType.UnknownSymbol, 'Θ', 5),
                 ]);
             });
@@ -45,11 +45,11 @@ describe('Lexer', () => {
         describe('Operations', () => {
             it('10 + 900', () => {
                 expect(analyzeCode('10 + 900')).toEqual([
-                    createToken(TokenType.DecimalValue, '10', 0),
+                    createToken(TokenType.NumericLiteral, '10', 0),
                     createToken(TokenType.Space, ' ', 2),
                     createToken(TokenType.Operation, '+', 3),
                     createToken(TokenType.Space, ' ', 4),
-                    createToken(TokenType.DecimalValue, '900', 5),
+                    createToken(TokenType.NumericLiteral, '900', 5),
                 ]);
             });
         });
