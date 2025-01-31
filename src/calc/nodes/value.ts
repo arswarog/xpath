@@ -24,4 +24,8 @@ export class ValueNode extends AbstractNode {
                 throw new Error(`Unexpected token type: ${valueToken.type}`);
         }
     }
+
+    public evaluate(): Value {
+        return this.value;
+    }
 }

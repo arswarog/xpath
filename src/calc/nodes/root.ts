@@ -11,4 +11,12 @@ export class RootNode extends AbstractNode {
     ) {
         super();
     }
+
+    public evaluate() {
+        if (!this.expression) {
+            throw new Error('Root expression is null');
+        }
+
+        return this.expression.evaluate();
+    }
 }
