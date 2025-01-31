@@ -11,7 +11,7 @@ export interface IDisplayProps {
 }
 
 export function Display({ data, onChange }: IDisplayProps) {
-    const { code, result } = data;
+    const { code, result, error } = data;
     return (
         <div className={b()}>
             <input
@@ -19,7 +19,7 @@ export function Display({ data, onChange }: IDisplayProps) {
                 defaultValue={code}
                 onChange={(e) => onChange?.(e.target.value)}
             />
-            <div className={b('result')}>{result}</div>
+            <div className={b('result', { error })}>{result}</div>
         </div>
     );
 }

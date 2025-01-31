@@ -1,5 +1,6 @@
 import { IDisplayData } from '../types';
 import { useMemo, useState } from 'react';
+import { parse } from '../calc/parser';
 
 export interface UseCalc {
     display: IDisplayData;
@@ -10,23 +11,37 @@ export function useCalc(): UseCalc {
     const [display, setDisplay] = useState<IDisplayData>({
         code: '',
         result: '',
+        error: true,
     });
 
     const actions = useMemo(() => {
-        let code = '6д + 2:00';
+        let code = '0';
 
         setDisplay({
             code,
-            result: '6д 2ч 12м',
+            result: '0',
+            error: false,
         });
 
         const handleChange = (newCode: string) => {
             code = newCode;
-            console.log(code);
-            setDisplay({
-                code,
-                result: '6д 2ч 12м',
-            });
+
+            try {
+                const root = parse(code);
+                const result = root.evaluate();
+
+                setDisplay({
+                    code,
+                    result: result.value.toString(),
+                    error: false,
+                });
+            } catch (_) {
+                setDisplay((state) => ({
+                    ...state,
+                    code,
+                    error: true,
+                }));
+            }
         };
 
         return {
