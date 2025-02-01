@@ -1,6 +1,7 @@
+import { Token, TokenType } from '../lexer';
+
 import { AbstractNode, NodeType } from './abstract';
 import { Value, ValueType } from './value.type';
-import { Token, TokenType } from '../lexer';
 
 export class ValueNode extends AbstractNode {
     public readonly type = NodeType.Value;

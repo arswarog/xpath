@@ -1,5 +1,6 @@
-import { AbstractNode, NodeType } from './abstract';
 import { Token } from '../lexer';
+
+import { AbstractNode, NodeType } from './abstract';
 import { NumberValue, Value, ValueType } from './value.type';
 
 export class BinaryExpressionNode extends AbstractNode {

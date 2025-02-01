@@ -1,6 +1,6 @@
 import { AbstractNode, NodeType } from './abstract';
 import { BinaryExpressionNode } from './binary-expression';
-import { ValueNode } from './value.ts';
+import { ValueNode } from './value';
 
 export class RootNode extends AbstractNode {
     public readonly type = NodeType.Root;

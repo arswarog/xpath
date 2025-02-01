@@ -1,8 +1,10 @@
-import styles from './CalculatorUI.module.scss';
 import block from 'bem-css-modules';
-import { Display } from './Display.tsx';
+
 import { IDisplayData, ButtonCode } from '../types';
-import { Keyboard } from './Keyboard.tsx';
+
+import styles from './CalculatorUI.module.scss';
+import { Display } from './Display';
+import { Keyboard } from './Keyboard';
 
 export interface ICalculatorUIProps {
     display: IDisplayData;

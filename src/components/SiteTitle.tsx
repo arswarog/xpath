@@ -1,5 +1,6 @@
-import styles from './SiteTitle.module.scss';
 import block from 'bem-css-modules';
+
+import styles from './SiteTitle.module.scss';
 
 const b = block(styles, 'SiteTitle');
 

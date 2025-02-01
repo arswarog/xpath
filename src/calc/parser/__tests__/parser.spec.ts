@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { TokenType } from '../../lexer';
-import { parse } from '../parser';
+
+import { TokenType , createToken } from '../../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../../nodes';
-import { createToken } from '../../lexer';
+import { parse } from '../parser';
 
 describe('Parser', () => {
     describe('common', () => {

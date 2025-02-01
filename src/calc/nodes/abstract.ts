@@ -1,4 +1,4 @@
-import { Value } from './value.type.ts';
+import { Value } from './value.type';
 
 export enum NodeType {
     Detached,

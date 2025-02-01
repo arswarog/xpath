@@ -1,7 +1,8 @@
+import block from 'bem-css-modules';
+
 import { IDisplayData } from '../types';
 
 import styles from './Display.module.scss';
-import block from 'bem-css-modules';
 
 const b = block(styles, 'Display');
 

@@ -1,4 +1,4 @@
-import { Token, TokenType } from './types.ts';
+import { Token, TokenType } from './types';
 
 export function createToken(type: TokenType, text: string, position: number): Token {
     return {

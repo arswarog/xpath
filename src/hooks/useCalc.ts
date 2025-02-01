@@ -1,6 +1,7 @@
-import { IDisplayData } from '../types';
 import { useMemo, useState } from 'react';
+
 import { parse } from '../calc/parser';
+import { IDisplayData } from '../types';
 
 export interface UseCalc {
     display: IDisplayData;

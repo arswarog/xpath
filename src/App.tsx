@@ -1,7 +1,7 @@
 import './App.css';
-import { SiteTitle } from './components/SiteTitle.tsx';
-import { CalculatorUI } from './components/CalculatorUI.tsx';
-import { useCalc } from './hooks/useCalc.ts';
+import { CalculatorUI } from './components/CalculatorUI';
+import { SiteTitle } from './components/SiteTitle';
+import { useCalc } from './hooks/useCalc';
 
 export function App() {
     const { display, onChange } = useCalc();

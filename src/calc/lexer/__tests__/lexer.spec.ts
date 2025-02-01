@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { analyzeCode } from '../lexer';
+
 import { createToken } from '../create-token';
+import { analyzeCode } from '../lexer';
 import { TokenType } from '../types';
 
 describe('Lexer', () => {
