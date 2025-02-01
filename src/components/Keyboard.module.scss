@@ -21,6 +21,10 @@
             filter: brightness(95%);
         }
 
+        &:focus {
+            outline: none;
+        }
+
         &_operator {
             background-color: #e6ebf0;
         }
