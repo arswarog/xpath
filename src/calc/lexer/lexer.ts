@@ -62,7 +62,19 @@ const tokenDeclarations: { type: TokenType; chars: string }[] = [
         chars: '0123456789',
     },
     {
-        type: TokenType.Operation,
-        chars: '+-*/',
+        type: TokenType.PlusOperation,
+        chars: '+',
+    },
+    {
+        type: TokenType.MinusOperation,
+        chars: '-',
+    },
+    {
+        type: TokenType.MultiplyOperation,
+        chars: '*×',
+    },
+    {
+        type: TokenType.DivideOperation,
+        chars: '/÷',
     },
 ];

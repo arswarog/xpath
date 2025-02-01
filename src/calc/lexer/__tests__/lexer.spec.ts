@@ -44,14 +44,55 @@ describe('Lexer', () => {
             });
         });
         describe('Operations', () => {
-            it('10 + 900', () => {
-                expect(analyzeCode('10 + 900')).toEqual([
-                    createToken(TokenType.NumericLiteral, '10', 0),
-                    createToken(TokenType.Space, ' ', 2),
-                    createToken(TokenType.Operation, '+', 3),
-                    createToken(TokenType.Space, ' ', 4),
-                    createToken(TokenType.NumericLiteral, '900', 5),
-                ]);
+            describe('PlusOperation', () => {
+                it('10+900', () => {
+                    expect(analyzeCode('10+900')).toEqual([
+                        createToken(TokenType.NumericLiteral, '10', 0),
+                        createToken(TokenType.PlusOperation, '+', 2),
+                        createToken(TokenType.NumericLiteral, '900', 3),
+                    ]);
+                });
+            });
+            describe('MinusOperation', () => {
+                it('118-3', () => {
+                    expect(analyzeCode('118-3')).toEqual([
+                        createToken(TokenType.NumericLiteral, '118', 0),
+                        createToken(TokenType.MinusOperation, '-', 3),
+                        createToken(TokenType.NumericLiteral, '3', 4),
+                    ]);
+                });
+            });
+            describe('MultiplyOperation', () => {
+                it('2*3', () => {
+                    expect(analyzeCode('2*3')).toEqual([
+                        createToken(TokenType.NumericLiteral, '2', 0),
+                        createToken(TokenType.MultiplyOperation, '*', 1),
+                        createToken(TokenType.NumericLiteral, '3', 2),
+                    ]);
+                });
+                it('2×5', () => {
+                    expect(analyzeCode('2×5')).toEqual([
+                        createToken(TokenType.NumericLiteral, '2', 0),
+                        createToken(TokenType.MultiplyOperation, '×', 1),
+                        createToken(TokenType.NumericLiteral, '5', 2),
+                    ]);
+                });
+            });
+            describe('DivideOperation', () => {
+                it('1/2', () => {
+                    expect(analyzeCode('1/2')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.DivideOperation, '/', 1),
+                        createToken(TokenType.NumericLiteral, '2', 2),
+                    ]);
+                });
+                it('1÷2', () => {
+                    expect(analyzeCode('1÷2')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.DivideOperation, '÷', 1),
+                        createToken(TokenType.NumericLiteral, '2', 2),
+                    ]);
+                });
             });
         });
     });

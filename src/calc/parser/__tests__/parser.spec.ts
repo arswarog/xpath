@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { TokenType , createToken } from '../../lexer';
+import { TokenType, createToken } from '../../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../../nodes';
 import { parse } from '../parser';
 
@@ -29,7 +29,7 @@ describe('Parser', () => {
             expect(ast).toEqual(
                 new RootNode(
                     new BinaryExpressionNode(
-                        createToken(TokenType.Operation, '+', 2),
+                        createToken(TokenType.PlusOperation, '+', 2),
                         new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)),
                         new ValueNode(createToken(TokenType.NumericLiteral, '34', 3)),
                     ),
@@ -48,9 +48,9 @@ describe('Parser', () => {
             expect(ast).toEqual(
                 new RootNode(
                     new BinaryExpressionNode(
-                        createToken(TokenType.Operation, '+', 4),
+                        createToken(TokenType.PlusOperation, '+', 4),
                         new BinaryExpressionNode(
-                            createToken(TokenType.Operation, '-', 2),
+                            createToken(TokenType.MinusOperation, '-', 2),
                             new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)),
                             new ValueNode(createToken(TokenType.NumericLiteral, '5', 3)),
                         ),
@@ -60,9 +60,9 @@ describe('Parser', () => {
                 ),
             );
         });
-        it('12*5+34', () => {
+        it('12×5+34', () => {
             // Arrange
-            const source = '12*5+34';
+            const source = '12×5+34';
 
             // Act
             const ast = parse(source);
@@ -71,9 +71,9 @@ describe('Parser', () => {
             expect(ast).toEqual(
                 new RootNode(
                     new BinaryExpressionNode(
-                        createToken(TokenType.Operation, '+', 4),
+                        createToken(TokenType.PlusOperation, '+', 4),
                         new BinaryExpressionNode(
-                            createToken(TokenType.Operation, '*', 2),
+                            createToken(TokenType.MultiplyOperation, '×', 2),
                             new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)),
                             new ValueNode(createToken(TokenType.NumericLiteral, '5', 3)),
                         ),
@@ -94,10 +94,10 @@ describe('Parser', () => {
             expect(ast).toEqual(
                 new RootNode(
                     new BinaryExpressionNode(
-                        createToken(TokenType.Operation, '+', 2),
+                        createToken(TokenType.PlusOperation, '+', 2),
                         new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)),
                         new BinaryExpressionNode(
-                            createToken(TokenType.Operation, '/', 5),
+                            createToken(TokenType.DivideOperation, '/', 5),
                             new ValueNode(createToken(TokenType.NumericLiteral, '35', 3)),
                             new ValueNode(createToken(TokenType.NumericLiteral, '5', 6)),
                         ),

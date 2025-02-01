@@ -2,7 +2,10 @@ export enum TokenType {
     UnknownSymbol,
     Space,
     NumericLiteral,
-    Operation,
+    PlusOperation,
+    MinusOperation,
+    MultiplyOperation,
+    DivideOperation,
 }
 
 export interface Positionable {

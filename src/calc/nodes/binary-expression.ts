@@ -1,4 +1,4 @@
-import { Token } from '../lexer';
+import { Token, TokenType } from '../lexer';
 
 import { AbstractNode, NodeType } from './abstract';
 import { NumberValue, Value, ValueType } from './value.type';
@@ -27,7 +27,7 @@ export class BinaryExpressionNode extends AbstractNode {
         if (leftValue.type === ValueType.Number) {
             return evaluateNumberExpression(
                 leftValue as NumberValue,
-                this.operator.text,
+                this.operator.type,
                 rightValue as NumberValue,
             );
         }
@@ -38,26 +38,26 @@ export class BinaryExpressionNode extends AbstractNode {
 
 function evaluateNumberExpression(
     left: NumberValue,
-    operator: string,
+    operator: TokenType,
     right: NumberValue,
 ): NumberValue {
     switch (operator) {
-        case '+':
+        case TokenType.PlusOperation:
             return {
                 type: ValueType.Number,
                 value: left.value + right.value,
             };
-        case '-':
+        case TokenType.MinusOperation:
             return {
                 type: ValueType.Number,
                 value: left.value - right.value,
             };
-        case '*':
+        case TokenType.MultiplyOperation:
             return {
                 type: ValueType.Number,
                 value: left.value * right.value,
             };
-        case '/':
+        case TokenType.DivideOperation:
             return {
                 type: ValueType.Number,
                 value: left.value / right.value,

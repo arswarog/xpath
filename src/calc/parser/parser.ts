@@ -47,7 +47,14 @@ function parseBinaryExpression(ctx: Context, precedence = 0): BinaryExpressionNo
     while (!ctx.isEnd()) {
         const operator = ctx.getCurrentToken();
 
-        if (operator.type !== TokenType.Operation) {
+        if (
+            ![
+                TokenType.PlusOperation,
+                TokenType.MinusOperation,
+                TokenType.MultiplyOperation,
+                TokenType.DivideOperation,
+            ].includes(operator.type)
+        ) {
             break;
         }
 
@@ -76,18 +83,14 @@ function parseValue(ctx: Context): BinaryExpressionNode | ValueNode {
 }
 
 function getPrecedence(operator: Token): number {
-    if (operator.type !== TokenType.Operation) {
-        throw new Error(`Expected operator, got "${operator.text}"`);
-    }
-
-    switch (operator.text) {
-        case '+':
-        case '-':
+    switch (operator.type) {
+        case TokenType.PlusOperation:
+        case TokenType.MinusOperation:
             return 1;
-        case '*':
-        case '/':
+        case TokenType.MultiplyOperation:
+        case TokenType.DivideOperation:
             return 2;
         default:
-            return 0;
+            throw new Error(`Expected operation, got "${operator.type}"`);
     }
 }
