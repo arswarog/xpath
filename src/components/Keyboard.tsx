@@ -16,7 +16,7 @@ export interface IKeyboardProps {
 }
 
 export function Keyboard({ onClick }: IKeyboardProps) {
-    const buttons = useMemo(() => buildButtons(buttonsMeta, keyboardLayout, onClick), []);
+    const buttons = useMemo(() => buildButtons(buttonsMeta, keyboardLayout, onClick), [onClick]);
     const gridTemplateAreas = useMemo(() => buildGridTemplateAreas(keyboardLayout), []);
 
     return (
