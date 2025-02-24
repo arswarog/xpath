@@ -6,6 +6,9 @@ export enum TokenType {
     MinusOperation,
     MultiplyOperation,
     DivideOperation,
+    HourLiteral,
+    MinuteLiteral,
+    SecondLiteral,
 }
 
 export interface Positionable {

@@ -95,5 +95,85 @@ describe('Lexer', () => {
                 });
             });
         });
+        describe('time literals', () => {
+            describe('HourLiteral', () => {
+                it('1h', () => {
+                    expect(analyzeCode('1h')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.HourLiteral, 'h', 1),
+                    ]);
+                });
+                it('1H', () => {
+                    expect(analyzeCode('1H')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.HourLiteral, 'H', 1),
+                    ]);
+                });
+                it('1ч', () => {
+                    expect(analyzeCode('1ч')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.HourLiteral, 'ч', 1),
+                    ]);
+                });
+                it('1Ч', () => {
+                    expect(analyzeCode('1Ч')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.HourLiteral, 'Ч', 1),
+                    ]);
+                });
+            });
+            describe('MinuteLiteral', () => {
+                it('1m', () => {
+                    expect(analyzeCode('1m')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.MinuteLiteral, 'm', 1),
+                    ]);
+                });
+                it('1M', () => {
+                    expect(analyzeCode('1M')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.MinuteLiteral, 'M', 1),
+                    ]);
+                });
+                it('1м', () => {
+                    expect(analyzeCode('1м')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.MinuteLiteral, 'м', 1),
+                    ]);
+                });
+                it('1М', () => {
+                    expect(analyzeCode('1М')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.MinuteLiteral, 'М', 1),
+                    ]);
+                });
+            });
+            describe('SecondLiteral', () => {
+                it('1s', () => {
+                    expect(analyzeCode('1s')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.SecondLiteral, 's', 1),
+                    ]);
+                });
+                it('1S', () => {
+                    expect(analyzeCode('1S')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.SecondLiteral, 'S', 1),
+                    ]);
+                });
+                it('1с', () => {
+                    expect(analyzeCode('1с')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.SecondLiteral, 'с', 1),
+                    ]);
+                });
+                it('1С', () => {
+                    expect(analyzeCode('1С')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.SecondLiteral, 'С', 1),
+                    ]);
+                });
+            });
+        });
     });
 });
