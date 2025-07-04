@@ -1,5 +1,6 @@
-import './App.css';
 import block from 'bem-css-modules';
+
+import './App.css';
 
 import styles from './components/CalculatorUI.module.scss';
 import { DisplayWidget } from './components/Display.widget';

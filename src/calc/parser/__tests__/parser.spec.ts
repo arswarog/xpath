@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { TokenType, createToken } from '../../lexer';
+import { createToken, TokenType } from '../../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../../nodes';
 import { parse } from '../parser';
 

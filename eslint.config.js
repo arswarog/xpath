@@ -1,12 +1,13 @@
 import js from '@eslint/js';
-import globals from 'globals';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import tsEslint from 'typescript-eslint';
 
 import prettierConfig from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import prettierPlugin from 'eslint-plugin-prettier';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import globals from 'globals';
+import tsEslint from 'typescript-eslint';
 
 export default tsEslint.config(
     { ignores: ['dist'] },
@@ -63,6 +64,27 @@ export default tsEslint.config(
                 },
             ],
             'import/no-unresolved': 'off',
+        },
+    },
+    {
+        plugins: { 'simple-import-sort': simpleImportSort },
+        rules: {
+            'simple-import-sort/imports': [
+                'error',
+                {
+                    groups: [
+                        ['^node:', '^react$', '^react-dom/', '^@eslint/', '^vitest/'], // builtin
+                        ['^@?\\w'], // npm-пакеты
+                        ['^@src/'], // внутренние scope-пакеты
+                        ['^\\u0000'], // side-effect
+                        ['^\\.\\.(?!/?$)'], // импорты из вышестоящих директорий
+                        ['^\\./(?=.*/)(?!/?$)'], // импорты из текущей директории
+                    ],
+                },
+            ],
+            'simple-import-sort/exports': 'error',
+            'import/order': 'off',
+            'sort-imports': 'off',
         },
     },
     {

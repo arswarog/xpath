@@ -1,6 +1,7 @@
+import { JSX, useMemo } from 'react';
+
 import block from 'bem-css-modules';
 import { invert } from 'lodash';
-import { JSX, useMemo } from 'react';
 
 import { ButtonCode } from '../types';
 
