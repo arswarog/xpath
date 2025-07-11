@@ -3,11 +3,9 @@ import { createRoot } from 'react-dom/client';
 
 import { reatomContext } from '@reatom/npm-react';
 
-import { ctx } from '@src/state';
+import { App, ctx } from '@src/app';
 
 import './index.css';
-
-import { App } from './App';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>

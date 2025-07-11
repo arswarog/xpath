@@ -1,17 +1,16 @@
 import block from 'bem-css-modules';
 
-import { DisplayAtom } from '../state';
+import { ScreenAtom } from './atom';
+import styles from './component.module.scss';
 
-import styles from './Display.module.scss';
+const b = block(styles, 'Screen');
 
-const b = block(styles, 'Display');
-
-export interface IDisplayProps {
-    data: DisplayAtom;
+export interface IScreenProps {
+    data: ScreenAtom;
     onChange?: (code: string) => void;
 }
 
-export function Display({ data, onChange }: IDisplayProps) {
+export function ScreenComponent({ data, onChange }: IScreenProps) {
     const { code, result, error } = data;
     return (
         <div className={b()}>

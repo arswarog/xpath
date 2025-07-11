@@ -1,15 +1,15 @@
 import { atom } from '@reatom/framework';
 
-import { resultAtom } from './evaluation.atom';
-import { expressionAtom } from './expression.atom';
+import { expressionAtom } from '@src/entities/expression';
+import { resultAtom } from '@src/features/evaluate';
 
-export interface DisplayAtom {
+export interface ScreenAtom {
     code: string;
     result: string;
     error: boolean;
 }
 
-export const displayAtom = atom<DisplayAtom>((ctx) => {
+export const screenAtom = atom<ScreenAtom>((ctx) => {
     const code = ctx.spy(expressionAtom);
     const result = ctx.spy(resultAtom);
 

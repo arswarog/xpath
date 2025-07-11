@@ -1,28 +1,34 @@
 import { atom } from '@reatom/framework';
 
-import { parse } from '../calc/parser';
+import { expressionAtom } from '@src/entities/expression';
 
-import { expressionAtom } from './expression.atom';
+import { parse } from './lib';
 
-export const evaluationAtom = atom((ctx) => {
+export const astAtom = atom((ctx) => {
     const expression = ctx.spy(expressionAtom);
     try {
-        const root = parse(expression);
-        return root.evaluate();
+        return parse(expression);
+    } catch (_) {
+        return null;
+    }
+}, 'astAtom');
+
+export const evaluateAtom = atom((ctx) => {
+    const ast = ctx.spy(astAtom);
+    if (!ast) {
+        return null;
+    }
+    try {
+        return ast?.evaluate();
     } catch (_) {
         return null;
     }
 }, 'evaluationAtom');
 
-export interface ResultAtom {
-    result: string;
-    error: boolean;
-}
-
 let lastResult: string = '';
 
 export const resultAtom = atom((ctx) => {
-    const evaluation = ctx.spy(evaluationAtom);
+    const evaluation = ctx.spy(evaluateAtom);
     if (evaluation === null) {
         return {
             result: lastResult,

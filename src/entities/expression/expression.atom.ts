@@ -1,6 +1,7 @@
 import { action, atom } from '@reatom/framework';
 
-import { ButtonCode } from '../types';
+import { ButtonCode } from '@src/entities/keyboard';
+
 export const expressionAtom = atom('0', 'expressionAtom');
 
 export const changeExpressionAction = action(
