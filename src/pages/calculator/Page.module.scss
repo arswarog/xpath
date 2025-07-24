@@ -1,7 +1,14 @@
 .CalculatorPage {
-    padding: 0;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 20px 47px 18px #505d6640;
-    background: white;
+    height: calc(100vh - 40px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__calculator {
+        padding: 0;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 47px 18px #505d6640;
+        background: white;
+    }
 }

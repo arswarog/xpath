@@ -9,8 +9,10 @@ const b = block(styles, 'CalculatorPage');
 export function CalculatorPage() {
     return (
         <div className={b()}>
-            <Screen />
-            <Keyboard />
+            <div className={b('calculator')}>
+                <Screen />
+                <Keyboard />
+            </div>
         </div>
     );
 }
