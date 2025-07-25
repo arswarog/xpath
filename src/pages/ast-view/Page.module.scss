@@ -1,0 +1,27 @@
+.AstViewPage {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    min-height: 100%;
+    max-width: none;
+    padding-top: 0;
+
+    &__title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    &__display {
+        overflow: hidden;
+        box-shadow: 0 20px 47px 18px #505d6640;
+        border-radius: 20px;
+        position: sticky;
+        top: 20px;
+    }
+
+    &__ast {
+        display: block;
+    }
+}
