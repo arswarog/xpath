@@ -9,12 +9,12 @@ export function App() {
     return (
         <Routes>
             <Route
-                path="/"
-                element={<CalculatorPage />}
-            />
-            <Route
                 path="ast"
                 element={<AstViewPage />}
+            />
+            <Route
+                path="*"
+                element={<CalculatorPage />}
             />
         </Routes>
     );
