@@ -1,7 +1,6 @@
-import { Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
 
 import { AstViewPage } from '@src/pages/ast-view';
-import { CalculatorPage } from '@src/pages/calculator';
 import { DevLayout } from '@src/pages/dev-layout';
 import { HighlightPage } from '@src/pages/highlight';
 import { TokensViewPage } from '@src/pages/tokens-view';
@@ -27,7 +26,12 @@ export function App() {
             </Route>
             <Route
                 path="*"
-                element={<CalculatorPage />}
+                element={
+                    <Navigate
+                        replace
+                        to="/ast"
+                    />
+                }
             />
         </Routes>
     );
