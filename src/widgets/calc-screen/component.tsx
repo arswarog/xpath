@@ -11,16 +11,15 @@ export interface IScreenProps {
 }
 
 export function ScreenComponent({ data, onChange }: IScreenProps) {
-    const { code, result, error } = data;
+    const { code } = data;
     return (
         <div className={b()}>
-            <input
+            <textarea
                 className={b('code')}
                 value={code}
                 onChange={(e) => onChange?.(e.target.value)}
                 autoFocus
             />
-            <div className={b('result', { error })}>&nbsp;{result}</div>
         </div>
     );
 }

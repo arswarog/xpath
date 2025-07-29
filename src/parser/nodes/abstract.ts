@@ -1,7 +1,5 @@
 import { Positionable } from '../common';
 
-import { Value } from './value.type';
-
 export enum NodeType {
     Detached,
     Root,
@@ -16,6 +14,4 @@ export abstract class AbstractNode implements Positionable {
 
     public start: number = INVALID_POSITION;
     public end: number = INVALID_POSITION;
-
-    public abstract evaluate(): Value;
 }
