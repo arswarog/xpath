@@ -51,8 +51,17 @@ export function analyzeCode(code: string): Token[] {
 
 function getCharType(char: string): TokenDeclaration {
     for (const data of tokenDeclarations) {
-        if (data.chars.includes(char)) {
-            return data;
+        const { chars } = data;
+        if (typeof chars === 'string') {
+            if (chars.includes(char)) {
+                return data;
+            }
+        }
+
+        if (isRegExp(chars)) {
+            if (chars.test(char)) {
+                return data;
+            }
         }
     }
 
@@ -60,4 +69,8 @@ function getCharType(char: string): TokenDeclaration {
         type: TokenType.UnknownSymbol,
         chars: '',
     };
+}
+
+function isRegExp(value: string | RegExp): value is RegExp {
+    return value instanceof RegExp;
 }

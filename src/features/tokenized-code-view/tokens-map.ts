@@ -11,4 +11,5 @@ export const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
     [TokenType.ClosingRoundBracket]: SyntaxTheme.Regular,
     [TokenType.Equal]: SyntaxTheme.Operator,
     [TokenType.Asterisk]: SyntaxTheme.Operator,
+    [TokenType.Attribute]: SyntaxTheme.Constant,
 };

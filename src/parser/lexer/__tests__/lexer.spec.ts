@@ -47,4 +47,32 @@ describe('Lexer', () => {
             ]);
         });
     });
+    describe('Attributes', () => {
+        it('single data attribute', () => {
+            expect(analyzeCode('@data-qa-type')).toEqual([
+                createToken(TokenType.Attribute, '@data-qa-type', 0),
+            ]);
+        });
+        it('attribute with value', () => {
+            expect(analyzeCode('@data-qa-type = *')).toEqual([
+                createToken(TokenType.Attribute, '@data-qa-type', 0),
+                createToken(TokenType.Space, ' ', 13),
+                createToken(TokenType.Equal, '=', 14),
+                createToken(TokenType.Space, ' ', 15),
+                createToken(TokenType.Asterisk, '*', 16),
+            ]);
+        });
+        it('attribute not starting with @', () => {
+            expect(analyzeCode('data@qa-type')).toEqual([
+                createToken(TokenType.UnknownSymbol, 'data', 0),
+                createToken(TokenType.Attribute, '@qa-type', 4),
+            ]);
+        });
+        it('not char after @', () => {
+            expect(analyzeCode('@-qa-type')).toEqual([
+                createToken(TokenType.UnknownSymbol, '@', 0),
+                createToken(TokenType.Attribute, '@qa-type', 4),
+            ]);
+        });
+    });
 });

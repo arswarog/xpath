@@ -2,7 +2,8 @@ import { TokenType } from './types';
 
 export interface TokenDeclaration {
     type: TokenType;
-    chars: string;
+    // все символы, которые могут быть в токене
+    chars: string | RegExp;
     // каждый символ этого типа - отдельный токен
     single?: boolean;
 }
@@ -41,5 +42,10 @@ export const tokenDeclarations: TokenDeclaration[] = [
         type: TokenType.Asterisk,
         chars: '*',
         single: true,
+    },
+    {
+        type: TokenType.Attribute,
+        chars: /^[@\w+-]$/,
+        check: /^@\w[\w+-]+$/,
     },
 ];
