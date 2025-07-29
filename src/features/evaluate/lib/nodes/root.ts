@@ -1,3 +1,5 @@
+import { HighlightedError, PositionalError } from '../common';
+
 import { AbstractNode, NodeType } from './abstract';
 import { BinaryExpressionNode } from './binary-expression';
 import { ValueNode } from './value';
@@ -17,6 +19,14 @@ export class RootNode extends AbstractNode {
             throw new Error('Root expression is null');
         }
 
-        return this.expression.evaluate();
+        try {
+            return this.expression.evaluate();
+        } catch (e) {
+            if (e instanceof PositionalError) {
+                throw new HighlightedError(e, this.source);
+            } else {
+                throw e;
+            }
+        }
     }
 }

@@ -6,6 +6,5 @@ export function createToken(type: TokenType, text: string, position: number): To
         text,
         start: position,
         end: position + text.length,
-        fullEnd: position + text.length,
     };
 }

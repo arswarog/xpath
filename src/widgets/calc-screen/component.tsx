@@ -18,6 +18,7 @@ export function ScreenComponent({ data, onChange }: IScreenProps) {
                 className={b('code')}
                 value={code}
                 onChange={(e) => onChange?.(e.target.value)}
+                autoFocus
             />
             <div className={b('result', { error })}>&nbsp;{result}</div>
         </div>

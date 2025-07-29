@@ -1,5 +1,8 @@
+import { Positionable } from '../common';
+
 export enum TokenType {
-    UnknownSymbol,
+    UnknownSymbol = -1,
+    EndOfFile = 0,
     Space,
     NumericLiteral,
     PlusOperation,
@@ -9,12 +12,6 @@ export enum TokenType {
     HourLiteral,
     MinuteLiteral,
     SecondLiteral,
-}
-
-export interface Positionable {
-    start: number;
-    end: number;
-    fullEnd: number;
 }
 
 export interface Token extends Positionable {

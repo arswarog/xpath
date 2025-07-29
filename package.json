@@ -12,7 +12,6 @@
         "lint:prettier": "prettier --check .",
         "lint:prettier:fix": "prettier --write .",
         "lint:staged": "lint-staged",
-        "lint:types": "tsc --noEmit --skipLibCheck",
         "preview": "vite preview",
         "test": "vitest"
     },

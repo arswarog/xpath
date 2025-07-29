@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { HighlightedError, PositionalError } from '../../common/errors';
 import { createToken, TokenType } from '../../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../../nodes';
 import { parse } from '../parser';
@@ -108,17 +109,45 @@ describe('Parser', () => {
         });
         it('failed: expected value', () => {
             // Arrange
-            const source = '12+35/d';
+            const source = '12+35/x';
 
             // Act & Assert
-            expect(() => parse(source)).toThrowError(/Expected value, got "d"/);
+            expect(() => parse(source)).toThrowError(
+                new HighlightedError(
+                    new PositionalError('Expected value, got "x"', {
+                        start: 6,
+                        end: 7,
+                    }),
+                    source,
+                ),
+            );
         });
         it('failed: unexpected token', () => {
             // Arrange
-            const source = '12+35d';
+            const source = '12+35xx';
 
             // Act & Assert
-            expect(() => parse(source)).toThrowError(/Unexpected token: "d"/);
+            expect(() => parse(source)).toThrowError(
+                new HighlightedError(
+                    new PositionalError('Unexpected token "xx"', { start: 5, end: 7 }),
+                    source,
+                ),
+            );
+        });
+        it('failed: unexpected end of file', () => {
+            // Arrange
+            const source = '12+35/';
+
+            // Act & Assert
+            expect(() => parse(source)).toThrowError(
+                new HighlightedError(
+                    new PositionalError('Expected value, got "[EOF]"', {
+                        start: 6,
+                        end: 6,
+                    }),
+                    source,
+                ),
+            );
         });
     });
 });

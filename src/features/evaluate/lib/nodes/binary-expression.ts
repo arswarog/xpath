@@ -1,3 +1,4 @@
+import { PositionalError } from '../common';
 import { Token, TokenType } from '../lexer';
 
 import { AbstractNode, NodeType } from './abstract';
@@ -27,7 +28,7 @@ export class BinaryExpressionNode extends AbstractNode {
         if (leftValue.type === ValueType.Number) {
             return evaluateNumberExpression(
                 leftValue as NumberValue,
-                this.operator.type,
+                this.operator,
                 rightValue as NumberValue,
             );
         }
@@ -38,10 +39,10 @@ export class BinaryExpressionNode extends AbstractNode {
 
 function evaluateNumberExpression(
     left: NumberValue,
-    operator: TokenType,
+    operator: Token,
     right: NumberValue,
 ): NumberValue {
-    switch (operator) {
+    switch (operator.type) {
         case TokenType.PlusOperation:
             return {
                 type: ValueType.Number,
@@ -63,6 +64,6 @@ function evaluateNumberExpression(
                 value: left.value / right.value,
             };
         default:
-            throw new Error(`Unexpected operator: ${operator}`);
+            throw new PositionalError(`Unexpected operator "${operator.text}"`, operator);
     }
 }

@@ -1,15 +1,17 @@
 import { useAtom } from '@reatom/npm-react';
 import block from 'bem-css-modules';
 
-import { astAtom } from '@src/features/evaluate';
+import { astAtom, astParsingErrorAtom } from '@src/features/evaluate';
 import { AstView } from '@src/widgets/ast-view';
 import { Screen } from '@src/widgets/calc-screen';
+import { ErrorView } from '@src/widgets/error-view';
 
 import styles from './Page.module.scss';
 const b = block(styles, 'AstViewPage');
 
 export function AstViewPage() {
     const [ast] = useAtom(astAtom);
+    const [error] = useAtom(astParsingErrorAtom);
 
     return (
         <div className={b()}>
@@ -18,6 +20,7 @@ export function AstViewPage() {
                 <Screen />
             </div>
             <div className={b('ast')}>
+                {error && <ErrorView error={error} />}
                 {ast ? <AstView ast={ast} /> : 'Ошибка парсинга выражения'}
             </div>
         </div>
