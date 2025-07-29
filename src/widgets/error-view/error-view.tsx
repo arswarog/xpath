@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import block from 'bem-css-modules';
 
-import { HighlightedError } from '@src/features/evaluate';
+import { HighlightedError } from '@src/parser';
 
 import styles from './error-view.module.scss';
 

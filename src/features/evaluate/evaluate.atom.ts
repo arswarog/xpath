@@ -1,9 +1,7 @@
 import { atom } from '@reatom/framework';
 
 import { expressionAtom } from '@src/entities/expression';
-import { HighlightedError, PositionalError } from '@src/features/evaluate';
-
-import { parse } from './lib';
+import { HighlightedError, parse, PositionalError } from '@src/parser';
 
 export const astParsingErrorAtom = atom<HighlightedError | null>(null, 'astParsingErrorAtom');
 

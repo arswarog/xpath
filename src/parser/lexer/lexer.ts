@@ -1,4 +1,5 @@
 import { createToken } from './create-token';
+import { tokenDeclarations } from './tokens';
 import { Token, TokenType } from './types';
 
 export function analyzeCode(code: string): Token[] {
@@ -51,42 +52,3 @@ function getCharType(char: string): TokenType {
 
     return TokenType.UnknownSymbol;
 }
-
-const tokenDeclarations: { type: TokenType; chars: string }[] = [
-    {
-        type: TokenType.Space,
-        chars: ' ',
-    },
-    {
-        type: TokenType.NumericLiteral,
-        chars: '0123456789',
-    },
-    {
-        type: TokenType.PlusOperation,
-        chars: '+',
-    },
-    {
-        type: TokenType.MinusOperation,
-        chars: '-',
-    },
-    {
-        type: TokenType.MultiplyOperation,
-        chars: '*×',
-    },
-    {
-        type: TokenType.DivideOperation,
-        chars: '/÷',
-    },
-    {
-        type: TokenType.HourLiteral,
-        chars: 'hHчЧ',
-    },
-    {
-        type: TokenType.MinuteLiteral,
-        chars: 'mMмМ',
-    },
-    {
-        type: TokenType.SecondLiteral,
-        chars: 'sSсС',
-    },
-];
