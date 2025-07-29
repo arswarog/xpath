@@ -38,7 +38,15 @@ function parseBinaryExpression(
     ctx: ParserContext,
     precedence = 0,
 ): BinaryExpressionNode | ValueNode {
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
     let left = parseValue(ctx);
+
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
 
     while (!ctx.isEnd()) {
         const operator = ctx.getCurrentToken();
@@ -59,6 +67,10 @@ function parseBinaryExpression(
 
         ctx.next();
 
+        if (ctx.getCurrentToken().type === TokenType.Space) {
+            ctx.next();
+        }
+
         const right = parseBinaryExpression(ctx, operatorPrecedence + 1);
 
         left = new BinaryExpressionNode(operator, left, right);
@@ -72,6 +84,7 @@ function parseValue(ctx: ParserContext): BinaryExpressionNode | ValueNode {
 
     if (value.type === TokenType.NumericLiteral) {
         ctx.next();
+
         return new ValueNode(value);
     }
 

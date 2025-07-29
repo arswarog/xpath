@@ -153,4 +153,29 @@ describe('Parser', () => {
             );
         });
     });
+    describe('spaces', () => {
+        it('spaces in the middle', () => {
+            // Arrange
+            const source = ' 12 + 35 / 5 ';
+
+            // Act
+            const ast = parse(source);
+
+            // Assert
+            expect(ast).toEqual(
+                new RootNode(
+                    new BinaryExpressionNode(
+                        createToken(TokenType.PlusOperation, '+', 4),
+                        new ValueNode(createToken(TokenType.NumericLiteral, '12', 1)),
+                        new BinaryExpressionNode(
+                            createToken(TokenType.DivideOperation, '/', 9),
+                            new ValueNode(createToken(TokenType.NumericLiteral, '35', 6)),
+                            new ValueNode(createToken(TokenType.NumericLiteral, '5', 11)),
+                        ),
+                    ),
+                    source,
+                ),
+            );
+        });
+    });
 });
