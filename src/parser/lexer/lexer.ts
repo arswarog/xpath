@@ -11,16 +11,23 @@ export function analyzeCode(code: string): Token[] {
 
     let index = 0;
     let buffer = '';
-    let tokenType = TokenType.NumericLiteral;
+    let tokenType = TokenType.UnknownSymbol;
 
     do {
         const char = code[index];
-        const { type } = getCharType(char);
+        const { type, single } = getCharType(char);
 
         if (!buffer.length) {
             buffer = char;
             tokenType = type;
             index++;
+
+            if (single) {
+                tokens.push(createToken(tokenType, char, index - 1));
+                buffer = '';
+                tokenType = TokenType.UnknownSymbol;
+            }
+
             continue;
         }
 
@@ -31,9 +38,8 @@ export function analyzeCode(code: string): Token[] {
         }
 
         tokens.push(createToken(tokenType, buffer, index - buffer.length));
-        buffer = char;
-        tokenType = type;
-        index++;
+        buffer = '';
+        tokenType = TokenType.UnknownSymbol;
     } while (index < code.length);
 
     if (buffer.length) {
