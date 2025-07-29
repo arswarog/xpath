@@ -1,5 +1,5 @@
 import { createToken } from './create-token';
-import { tokenDeclarations } from './tokens';
+import { TokenDeclaration, tokenDeclarations } from './tokens';
 import { Token, TokenType } from './types';
 
 export function analyzeCode(code: string): Token[] {
@@ -15,16 +15,16 @@ export function analyzeCode(code: string): Token[] {
 
     do {
         const char = code[index];
-        const charType = getCharType(char);
+        const { type } = getCharType(char);
 
         if (!buffer.length) {
             buffer = char;
-            tokenType = charType;
+            tokenType = type;
             index++;
             continue;
         }
 
-        if (charType === tokenType) {
+        if (type === tokenType) {
             buffer += char;
             index++;
             continue;
@@ -32,7 +32,7 @@ export function analyzeCode(code: string): Token[] {
 
         tokens.push(createToken(tokenType, buffer, index - buffer.length));
         buffer = char;
-        tokenType = charType;
+        tokenType = type;
         index++;
     } while (index < code.length);
 
@@ -43,12 +43,15 @@ export function analyzeCode(code: string): Token[] {
     return tokens;
 }
 
-function getCharType(char: string): TokenType {
-    for (const { chars, type } of tokenDeclarations) {
-        if (chars.includes(char)) {
-            return type;
+function getCharType(char: string): TokenDeclaration {
+    for (const data of tokenDeclarations) {
+        if (data.chars.includes(char)) {
+            return data;
         }
     }
 
-    return TokenType.UnknownSymbol;
+    return {
+        type: TokenType.UnknownSymbol,
+        chars: '',
+    };
 }
