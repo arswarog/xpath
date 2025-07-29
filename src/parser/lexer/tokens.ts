@@ -4,11 +4,18 @@ export interface TokenDeclaration {
     type: TokenType;
     // все символы, которые могут быть в токене
     chars: string | RegExp;
+    // финальная проверка
+    check?: RegExp | ((text: string) => boolean);
     // каждый символ этого типа - отдельный токен
     single?: boolean;
 }
 
 export const tokenDeclarations: TokenDeclaration[] = [
+    {
+        type: TokenType.EndOfFile,
+        chars: /.*/,
+        check: (str) => !str,
+    },
     {
         type: TokenType.Space,
         chars: ' ',
