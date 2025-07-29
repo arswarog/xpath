@@ -28,8 +28,4 @@ export class ValueNode extends AbstractNode {
         this.start = valueToken.start;
         this.end = valueToken.end;
     }
-
-    public evaluate(): Value {
-        return this.value;
-    }
 }
