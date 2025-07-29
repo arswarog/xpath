@@ -10,6 +10,7 @@ export enum TokenType {
     ClosingRoundBracket, // символ ')'
     Equal, // символ '='
     Asterisk, // символ '*'
+    Attribute,
 }
 
 export interface Token extends Positionable {
