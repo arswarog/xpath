@@ -26,7 +26,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     if (!ctx.isEnd()) {
         throw new PositionalError(
-            `Unexpected token "${ctx.getCurrentToken().text}"`,
+            `Unexpected token "${ctx.getCurrentToken().text}" (${TokenType[ctx.getCurrentToken().type]})`,
             ctx.getCurrentToken(),
         );
     }

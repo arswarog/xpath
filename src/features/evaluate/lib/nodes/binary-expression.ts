@@ -13,6 +13,9 @@ export class BinaryExpressionNode extends AbstractNode {
         public right: AbstractNode,
     ) {
         super();
+
+        this.start = left.start;
+        this.end = right.end;
     }
 
     public evaluate(): Value {

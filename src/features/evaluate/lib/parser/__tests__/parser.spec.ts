@@ -55,7 +55,7 @@ describe('Parser', () => {
                             new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)),
                             new ValueNode(createToken(TokenType.NumericLiteral, '5', 3)),
                         ),
-                        new ValueNode(createToken(TokenType.NumericLiteral, '34', 6)),
+                        new ValueNode(createToken(TokenType.NumericLiteral, '34', 5)),
                     ),
                     source,
                 ),
@@ -78,7 +78,7 @@ describe('Parser', () => {
                             new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)),
                             new ValueNode(createToken(TokenType.NumericLiteral, '5', 3)),
                         ),
-                        new ValueNode(createToken(TokenType.NumericLiteral, '34', 6)),
+                        new ValueNode(createToken(TokenType.NumericLiteral, '34', 5)),
                     ),
                     source,
                 ),
@@ -129,7 +129,10 @@ describe('Parser', () => {
             // Act & Assert
             expect(() => parse(source)).toThrowError(
                 new HighlightedError(
-                    new PositionalError('Unexpected token "xx"', { start: 5, end: 7 }),
+                    new PositionalError('Unexpected token "xx" (UnknownSymbol)', {
+                        start: 5,
+                        end: 7,
+                    }),
                     source,
                 ),
             );
