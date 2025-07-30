@@ -15,4 +15,5 @@ export const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
     [TokenType.StringLiteral]: SyntaxTheme.String,
     [TokenType.And]: SyntaxTheme.Keyword,
     [TokenType.Or]: SyntaxTheme.Keyword,
+    [TokenType.SelectNode]: SyntaxTheme.Keyword,
 };

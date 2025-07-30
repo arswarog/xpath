@@ -77,4 +77,10 @@ export const tokenDeclarations: TokenDeclaration[] = [
         check: /^or?$/,
         finalCheck: (str) => str === 'or',
     },
+    {
+        type: TokenType.SelectNode,
+        chars: /[.*/]/,
+        check: /^\.\.?\/?\/?\*?$/,
+        finalCheck: (str) => ['.//*', '..//*'].includes(str),
+    },
 ];
