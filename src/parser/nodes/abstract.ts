@@ -5,6 +5,7 @@ export enum NodeType {
     Root,
     Attribute,
     Value,
+    CheckAttribute,
 }
 
 const INVALID_POSITION = -1;
