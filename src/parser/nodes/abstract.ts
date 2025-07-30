@@ -4,6 +4,7 @@ export enum NodeType {
     Detached,
     Root,
     Attribute,
+    Value,
 }
 
 const INVALID_POSITION = -1;
