@@ -2,7 +2,7 @@ import { ValueNode } from '@src/parser/nodes/value.ts';
 
 import { HighlightedError, PositionalError } from '../common';
 import { analyzeCode, Token, TokenType } from '../lexer';
-import { AttributeNode, CheckAttributeNode, RootNode } from '../nodes';
+import { AttributeNode, CheckAttributeNode, LogicalExpressionNode, RootNode } from '../nodes';
 
 import { createContext, ParserContext } from './context';
 
@@ -24,7 +24,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(parseCheckAttribute(ctx), source);
+    const root = new RootNode(parseLogicalExpression(ctx), source);
 
     if (!ctx.isEnd()) {
         //     throw new PositionalError(
@@ -34,6 +34,57 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     }
 
     return root;
+}
+
+function parseLogicalExpression(
+    ctx: ParserContext,
+    precedence = 0,
+): LogicalExpressionNode | CheckAttributeNode {
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    let left: CheckAttributeNode | LogicalExpressionNode = parseCheckAttribute(ctx);
+
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    while (!ctx.isEnd()) {
+        const operator = ctx.getCurrentToken();
+
+        if (![TokenType.And, TokenType.Or].includes(operator.type)) {
+            break;
+        }
+
+        const operatorPrecedence = getPrecedence(operator);
+        if (operatorPrecedence < precedence) {
+            break;
+        }
+
+        ctx.next();
+
+        if (ctx.getCurrentToken().type === TokenType.Space) {
+            ctx.next();
+        }
+
+        const right = parseLogicalExpression(ctx, operatorPrecedence + 1);
+
+        left = new LogicalExpressionNode(left, undefined, operator, undefined, right);
+    }
+
+    return left;
+}
+
+function getPrecedence(operator: Token): number {
+    switch (operator.type) {
+        case TokenType.Or:
+            return 1;
+        case TokenType.And:
+            return 2;
+        default:
+            throw new Error(`Expected operation, got "${operator.type}"`);
+    }
 }
 
 function parseCheckAttribute(ctx: ParserContext): CheckAttributeNode {
