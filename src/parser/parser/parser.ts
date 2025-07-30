@@ -1,8 +1,8 @@
 import { HighlightedError, PositionalError } from '../common';
 import { analyzeCode, Token, TokenType } from '../lexer';
-import { RootNode } from '../nodes';
+import { AttributeNode, RootNode } from '../nodes';
 
-import { createContext } from './context';
+import { createContext, ParserContext } from './context';
 
 export function parse(source: string): RootNode {
     try {
@@ -22,7 +22,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(null as never, source);
+    const root = new RootNode(parseAttribute(ctx), source);
 
     if (!ctx.isEnd()) {
         throw new PositionalError(
@@ -32,4 +32,15 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     }
 
     return root;
+}
+
+function parseAttribute(ctx: ParserContext): AttributeNode {
+    const attr = ctx.getCurrentToken();
+
+    if (attr.type === TokenType.Attribute) {
+        ctx.next();
+        return new AttributeNode(attr);
+    }
+
+    throw new PositionalError(`Expected attribute token, got ${attr.type}`, attr);
 }
