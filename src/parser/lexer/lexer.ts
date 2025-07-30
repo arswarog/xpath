@@ -77,44 +77,16 @@ export function analyzeCode(code: string): Token[] {
             throw new Error('Multiple tokens found');
         }
 
-        const { type } = actualTokens[0];
+        const { type, finalCheck } = actualTokens[0];
 
-        tokens.push(createToken(type, buffer, index - buffer.length));
+        if (!finalCheck || finalCheck(buffer)) {
+            tokens.push(createToken(type, buffer, index - buffer.length));
+        } else {
+            tokens.push(createToken(TokenType.UnknownSymbol, buffer, index - buffer.length));
+        }
 
         reset();
-
-        // break;
-
-        // const { type, single } = getCharType(char);
-        //
-        // if (!buffer.length) {
-        //     buffer = char;
-        //     tokenType = type;
-        //     index++;
-        //
-        //     if (single) {
-        //         tokens.push(createToken(tokenType, char, index - 1));
-        //         buffer = '';
-        //         tokenType = TokenType.UnknownSymbol;
-        //     }
-        //
-        //     continue;
-        // }
-        //
-        // if (type === tokenType) {
-        //     buffer += char;
-        //     index++;
-        //     continue;
-        // }
-        //
-        // tokens.push(createToken(tokenType, buffer, index - buffer.length));
-        // buffer = '';
-        // tokenType = TokenType.UnknownSymbol;
     } while (index <= code.length);
-
-    // if (buffer.length) {
-    //     tokens.push(createToken(tokenType, buffer, index - buffer.length));
-    // }
 
     return tokens;
 }
