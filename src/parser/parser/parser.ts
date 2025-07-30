@@ -27,10 +27,10 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     const root = new RootNode(parseValue(ctx), source);
 
     if (!ctx.isEnd()) {
-        throw new PositionalError(
-            `Unexpected token "${ctx.getCurrentToken().text}" (${TokenType[ctx.getCurrentToken().type]})`,
-            ctx.getCurrentToken(),
-        );
+        //     throw new PositionalError(
+        //         `Unexpected token "${ctx.getCurrentToken().text}" (${TokenType[ctx.getCurrentToken().type]})`,
+        //         ctx.getCurrentToken(),
+        //     );
     }
 
     return root;
