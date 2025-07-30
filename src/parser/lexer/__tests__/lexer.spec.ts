@@ -62,6 +62,13 @@ describe('Lexer', () => {
                 createToken(TokenType.Asterisk, '*', 16),
             ]);
         });
+        it('not char after @', () => {
+            expect(analyzeCode('@-qa-type=@data-x')).toEqual([
+                createToken(TokenType.UnknownSymbol, '@-qa-type', 0),
+                createToken(TokenType.Equal, '=', 9),
+                createToken(TokenType.Attribute, '@data-x', 10),
+            ]);
+        });
         it('attribute not starting with @', () => {
             expect(analyzeCode('data@qa-type')).toEqual([
                 createToken(TokenType.UnknownSymbol, 'data', 0),
@@ -72,6 +79,15 @@ describe('Lexer', () => {
             expect(analyzeCode('@-qa-type')).toEqual([
                 createToken(TokenType.UnknownSymbol, '@', 0),
                 createToken(TokenType.Attribute, '@qa-type', 4),
+            ]);
+        });
+        it('присвоение значения атрибуту', () => {
+            expect(analyzeCode('@data-qa-type = "test"')).toEqual([
+                createToken(TokenType.Attribute, '@data-qa-type', 0),
+                createToken(TokenType.Space, ' ', 13),
+                createToken(TokenType.Equal, '=', 14),
+                createToken(TokenType.Space, ' ', 15),
+                createToken(TokenType.UnknownSymbol, '"test"', 16),
             ]);
         });
     });
