@@ -53,8 +53,6 @@ export function analyzeCode(code: string): Token[] {
             continue;
         }
 
-        console.log(possibleTokens);
-
         const actualTokens = possibleTokens.filter(({ check }) => {
             if (!check) {
                 return true;
@@ -67,7 +65,7 @@ export function analyzeCode(code: string): Token[] {
             return check(buffer);
         });
 
-        console.log({ possibleTokens, actualTokens });
+        console.log({ char, buffer, possibleTokens, actualTokens });
 
         if (actualTokens.length === 0) {
             tokens.push(createToken(TokenType.UnknownSymbol, buffer, index - buffer.length));
@@ -76,7 +74,6 @@ export function analyzeCode(code: string): Token[] {
         }
 
         if (actualTokens.length > 1) {
-            console.log({ possibleTokens, actualTokens, buffer });
             throw new Error('Multiple tokens found');
         }
 
