@@ -2,6 +2,13 @@ import { createToken } from './create-token';
 import { TokenDeclaration, tokenDeclarations } from './tokens';
 import { Token, TokenType } from './types';
 
+const unknownSymbol: TokenDeclaration = {
+    type: TokenType.UnknownSymbol,
+    chars: /.*/,
+    check: () => true,
+    finalCheck: () => true,
+};
+
 export function analyzeCode(code: string): Token[] {
     const tokens: Token[] = [];
 
@@ -27,7 +34,16 @@ export function analyzeCode(code: string): Token[] {
             break;
         }
 
-        const nextPossibleTokens = filterPossibleTokens(char, possibleTokens);
+        const nextPossibleTokens = filterPossibleTokens(char, buffer + char, possibleTokens);
+
+        if (nextPossibleTokens.length === 0 && !buffer) {
+            tokens.push(createToken(TokenType.UnknownSymbol, char, index));
+            reset();
+
+            index++;
+
+            continue;
+        }
 
         if (nextPossibleTokens.length && char) {
             possibleTokens = nextPossibleTokens;
@@ -106,20 +122,36 @@ export function analyzeCode(code: string): Token[] {
     return tokens;
 }
 
-function filterPossibleTokens(char: string, list: TokenDeclaration[]): TokenDeclaration[] {
-    return list.filter(({ chars }) => {
-        if (char && typeof chars === 'string') {
-            if (chars.includes(char)) {
-                return true;
+function filterPossibleTokens(
+    char: string,
+    buffer: string,
+    list: TokenDeclaration[],
+): TokenDeclaration[] {
+    return list
+        .filter(({ chars }) => {
+            if (char && typeof chars === 'string') {
+                if (chars.includes(char)) {
+                    return true;
+                }
             }
-        }
 
-        if (isRegExp(chars)) {
-            if (chars.test(char)) {
+            if (isRegExp(chars)) {
+                if (chars.test(char)) {
+                    return true;
+                }
+            }
+        })
+        .filter(({ check }) => {
+            if (!check) {
                 return true;
             }
-        }
-    });
+
+            if (isRegExp(check)) {
+                return check.test(buffer);
+            }
+
+            return check(buffer);
+        });
 }
 
 function isRegExp(value: unknown): value is RegExp {
