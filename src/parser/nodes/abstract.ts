@@ -4,6 +4,7 @@ import { Token } from '../lexer';
 export enum NodeType {
     Detached,
     Root,
+    Attribute,
 }
 
 const INVALID_POSITION = -1;

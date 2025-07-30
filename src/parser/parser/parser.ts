@@ -1,8 +1,8 @@
 import { HighlightedError, PositionalError } from '../common';
 import { analyzeCode, Token, TokenType } from '../lexer';
-import { RootNode } from '../nodes';
+import { AttributeNode, RootNode } from '../nodes';
 
-import { createContext } from './context';
+import { createContext, ParserContext } from './context';
 import { checkTokensOrder, checkUndefinedTokens } from './utils';
 
 export function parse(source: string): RootNode {
@@ -23,7 +23,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(null as never, source);
+    const root = new RootNode(parseAttribute(ctx), source);
 
     if (!ctx.isEnd()) {
         throw new PositionalError(
@@ -38,4 +38,11 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     checkTokensOrder(codeTokens);
 
     return root;
+}
+
+export function parseAttribute(ctx: ParserContext): AttributeNode {
+    const attr = ctx.getCurrentTokenOrDie(TokenType.Attribute, 'Failed to parse attribute');
+    ctx.next();
+
+    return new AttributeNode(attr);
 }
