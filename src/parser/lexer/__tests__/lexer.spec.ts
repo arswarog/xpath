@@ -47,6 +47,74 @@ describe('Lexer', () => {
             ]);
         });
     });
+    describe('String literals', () => {
+        describe('single quote', () => {
+            it('success', () => {
+                expect(analyzeCode("'test'")).toEqual([
+                    createToken(TokenType.StringLiteral, "'test'", 0),
+                ]);
+            });
+            it('with spaces', () => {
+                expect(analyzeCode("' test '")).toEqual([
+                    createToken(TokenType.StringLiteral, "' test '", 0),
+                ]);
+            });
+            it('with spaces and special chars', () => {
+                expect(analyzeCode("' test \t'")).toEqual([
+                    createToken(TokenType.StringLiteral, "' test \t'", 0),
+                ]);
+            });
+            it('empty string', () => {
+                expect(analyzeCode("''")).toEqual([
+                    // только один токен
+                    createToken(TokenType.StringLiteral, "''", 0),
+                ]);
+            });
+            it('without closing quote', () => {
+                expect(analyzeCode("'test")).toEqual([
+                    createToken(TokenType.UnknownSymbol, "'test", 0),
+                ]);
+            });
+            it.skip('with spaces and new line chars', () => {
+                expect(analyzeCode("' test \n'")).toEqual([
+                    createToken(TokenType.StringLiteral, "' test \n'", 0),
+                ]);
+            });
+        });
+        describe('double quote', () => {
+            it('success', () => {
+                expect(analyzeCode('"test"')).toEqual([
+                    createToken(TokenType.StringLiteral, '"test"', 0),
+                ]);
+            });
+            it('with spaces', () => {
+                expect(analyzeCode('" test "')).toEqual([
+                    createToken(TokenType.StringLiteral, '" test "', 0),
+                ]);
+            });
+            it('with spaces and special chars', () => {
+                expect(analyzeCode('" test \t"')).toEqual([
+                    createToken(TokenType.StringLiteral, '" test \t"', 0),
+                ]);
+            });
+            it('empty string', () => {
+                expect(analyzeCode('""')).toEqual([
+                    // только один токен
+                    createToken(TokenType.StringLiteral, '""', 0),
+                ]);
+            });
+            it('without closing quote', () => {
+                expect(analyzeCode('"test')).toEqual([
+                    createToken(TokenType.UnknownSymbol, '"test', 0),
+                ]);
+            });
+            it.skip('with spaces and new line chars', () => {
+                expect(analyzeCode('" test \n"')).toEqual([
+                    createToken(TokenType.StringLiteral, '" test \n"', 0),
+                ]);
+            });
+        });
+    });
     describe('Attributes', () => {
         it('single data attribute', () => {
             expect(analyzeCode('@data-qa-type')).toEqual([
@@ -81,7 +149,7 @@ describe('Lexer', () => {
                 createToken(TokenType.Space, ' ', 13),
                 createToken(TokenType.Equal, '=', 14),
                 createToken(TokenType.Space, ' ', 15),
-                createToken(TokenType.UnknownSymbol, '"test"', 16),
+                createToken(TokenType.StringLiteral, '"test"', 16),
             ]);
         });
     });

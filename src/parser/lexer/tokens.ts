@@ -53,4 +53,16 @@ export const tokenDeclarations: TokenDeclaration[] = [
         check: /^@\w?[\w+-]*$/,
         finalCheck: (str) => /^@\w[\w+-]+$/.test(str),
     },
+    {
+        type: TokenType.StringLiteral,
+        chars: /./,
+        check: /^'[^']*'?$/m,
+        finalCheck: (str) => /^'[^']*'$/m.test(str),
+    },
+    {
+        type: TokenType.StringLiteral,
+        chars: /./,
+        check: /^"[^"]*"?$/m,
+        finalCheck: (str) => /^"[^"]*"$/m.test(str),
+    },
 ];

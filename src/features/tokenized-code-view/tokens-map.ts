@@ -12,4 +12,5 @@ export const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
     [TokenType.Equal]: SyntaxTheme.Operator,
     [TokenType.Asterisk]: SyntaxTheme.Operator,
     [TokenType.Attribute]: SyntaxTheme.Constant,
+    [TokenType.StringLiteral]: SyntaxTheme.String,
 };
