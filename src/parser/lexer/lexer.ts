@@ -37,7 +37,7 @@ export function analyzeCode(code: string): Token[] {
         const nextPossibleTokens = filterPossibleTokens(char, buffer + char, possibleTokens);
 
         if (nextPossibleTokens.length === 0 && !buffer) {
-            tokens.push(createToken(TokenType.UnknownSymbol, char, index));
+            insertUnknownSymbol(tokens, char, index + 1);
             reset();
 
             index++;
@@ -68,7 +68,7 @@ export function analyzeCode(code: string): Token[] {
         console.log({ char, buffer, possibleTokens, actualTokens });
 
         if (actualTokens.length === 0) {
-            tokens.push(createToken(TokenType.UnknownSymbol, buffer, index - buffer.length));
+            insertUnknownSymbol(tokens, buffer, index);
             reset();
             continue;
         }
@@ -82,7 +82,7 @@ export function analyzeCode(code: string): Token[] {
         if (!finalCheck || finalCheck(buffer)) {
             tokens.push(createToken(type, buffer, index - buffer.length));
         } else {
-            tokens.push(createToken(TokenType.UnknownSymbol, buffer, index - buffer.length));
+            insertUnknownSymbol(tokens, buffer, index);
         }
 
         reset();
@@ -125,4 +125,8 @@ function filterPossibleTokens(
 
 function isRegExp(value: unknown): value is RegExp {
     return value instanceof RegExp;
+}
+
+function insertUnknownSymbol(tokens: Token[], buffer: string, index: number) {
+    tokens.push(createToken(TokenType.UnknownSymbol, buffer, index - buffer.length));
 }
