@@ -45,6 +45,22 @@ export function analyzeCode(code: string): Token[] {
             continue;
         }
 
+        if (!buffer) {
+            const possibleSingleCharTokens = nextPossibleTokens.filter(({ single }) => single);
+
+            if (possibleSingleCharTokens.length > 1) {
+                throw new Error(`Multiple possible single char tokens for char "${char}"`);
+            }
+
+            if (possibleSingleCharTokens.length === 1) {
+                tokens.push(createToken(possibleSingleCharTokens[0].type, char, index));
+                reset();
+                index++;
+
+                continue;
+            }
+        }
+
         if (nextPossibleTokens.length && char) {
             possibleTokens = nextPossibleTokens;
             buffer += char;
