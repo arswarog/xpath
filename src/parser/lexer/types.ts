@@ -12,6 +12,8 @@ export enum TokenType {
     Asterisk, // символ '*'
     Attribute,
     StringLiteral,
+    And,
+    Or,
 }
 
 export interface Token extends Positionable {
