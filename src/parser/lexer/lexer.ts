@@ -84,7 +84,9 @@ export function analyzeCode(code: string): Token[] {
         console.log({ char, buffer, possibleTokens, actualTokens });
 
         if (actualTokens.length === 0) {
+            debugger;
             insertUnknownSymbol(tokens, buffer, index);
+            console.log(tokens);
             reset();
             continue;
         }
