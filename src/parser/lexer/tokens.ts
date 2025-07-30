@@ -15,7 +15,7 @@ export interface TokenDeclaration {
 export const tokenDeclarations: TokenDeclaration[] = [
     {
         type: TokenType.Space,
-        chars: ' ',
+        chars: ' \n\t',
     },
     {
         type: TokenType.OpeningSquareBracket,
