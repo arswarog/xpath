@@ -82,17 +82,39 @@ export function analyzeCode(code: string): Token[] {
             throw new Error('No possible tokens found');
         }
 
-        if (actualTokens.length > 1) {
-            throw new Error('Multiple tokens found');
+        if (actualTokens.length === 0) {
+            throw new PositionalError('No possible tokens found twice', {
+                start: index - buffer.length,
+                end: index,
+            });
         }
 
-        const { type, finalCheck } = actualTokens[0];
+        const completeTokens = actualTokens.filter(({ finalCheck }) => {
+            if (!finalCheck) {
+                return true;
+            }
 
-        if (!finalCheck || finalCheck(buffer)) {
-            tokens.push(createToken(type, buffer, index - buffer.length));
-        } else {
+            return finalCheck(buffer);
+        });
+
+        if (completeTokens.length === 0) {
             insertUnknownSymbol(tokens, buffer, index);
+
+            reset();
+
+            continue;
         }
+
+        if (completeTokens.length > 1) {
+            throw new PositionalError('Multiple tokens found', {
+                start: index - buffer.length,
+                end: index,
+            });
+        }
+
+        const { type } = actualTokens[0];
+
+        tokens.push(createToken(type, buffer, index - buffer.length));
 
         reset();
     } while (index <= code.length);
