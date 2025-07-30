@@ -153,4 +153,60 @@ describe('Lexer', () => {
             ]);
         });
     });
+    describe('Select node', () => {
+        it('.//*[', () => {
+            expect(analyzeCode('.//*[')).toEqual([
+                createToken(TokenType.SelectNode, './/*', 0),
+                createToken(TokenType.OpeningSquareBracket, '[', 4),
+            ]);
+        });
+        it('..//*[', () => {
+            expect(analyzeCode('..//*[')).toEqual([
+                createToken(TokenType.SelectNode, '..//*', 0),
+                createToken(TokenType.OpeningSquareBracket, '[', 5),
+            ]);
+        });
+        it('./descendant-or-self::*[', () => {
+            expect(analyzeCode('./descendant-or-self::*[')).toEqual([
+                createToken(TokenType.SelectNode, './descendant-or-self::*', 0),
+                createToken(TokenType.OpeningSquareBracket, '[', 23),
+            ]);
+        });
+        it('following::*[', () => {
+            expect(analyzeCode('following::*[')).toEqual([
+                createToken(TokenType.SelectNode, 'following::*', 0),
+                createToken(TokenType.OpeningSquareBracket, '[', 12),
+            ]);
+        });
+        it('or ./descendant::*[', () => {
+            expect(analyzeCode('or ./descendant::*[')).toEqual([
+                createToken(TokenType.Or, 'or', 0),
+                createToken(TokenType.Space, ' ', 2),
+                createToken(TokenType.SelectNode, './descendant::*', 3),
+                createToken(TokenType.OpeningSquareBracket, '[', 18),
+            ]);
+        });
+        it('[child::chapter/descendant::para [', () => {
+            expect(analyzeCode('[child::chapter/descendant::para [')).toEqual([
+                createToken(TokenType.OpeningSquareBracket, '[', 0),
+                createToken(TokenType.UnknownSymbol, 'child::chapter/descendant::para', 1),
+                createToken(TokenType.OpeningSquareBracket, '[', 36),
+            ]);
+        });
+        it('translate(n', () => {
+            expect(analyzeCode('translate(n')).toEqual([
+                createToken(TokenType.UnknownSymbol, 'translate', 0),
+                createToken(TokenType.OpeningRoundBracket, '(', 9),
+                createToken(TokenType.UnknownSymbol, 'n', 10),
+            ]);
+        });
+        it('[translate(@value', () => {
+            expect(analyzeCode('[translate(@value')).toEqual([
+                createToken(TokenType.OpeningSquareBracket, '[', 0),
+                createToken(TokenType.UnknownSymbol, 'translate', 1),
+                createToken(TokenType.OpeningRoundBracket, '(', 10),
+                createToken(TokenType.Attribute, '@value', 11),
+            ]);
+        });
+    });
 });
