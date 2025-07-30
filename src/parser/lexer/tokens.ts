@@ -13,11 +13,11 @@ export interface TokenDeclaration {
 }
 
 export const tokenDeclarations: TokenDeclaration[] = [
-    {
-        type: TokenType.EndOfFile,
-        chars: /.*/,
-        check: (str) => !str,
-    },
+    // {
+    //     type: TokenType.EndOfFile,
+    //     chars: /.*/,
+    //     check: (str) => !str,
+    // },
     {
         type: TokenType.Space,
         chars: ' ',
