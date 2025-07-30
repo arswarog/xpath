@@ -89,4 +89,10 @@ export const tokenDeclarations: TokenDeclaration[] = [
         check: /^\.\.?\/?[\w-]*:?:?\*?$/,
         finalCheck: (str) => /^\.\.?\/[\w-]+::\*$/.test(str),
     },
+    {
+        type: TokenType.SelectNode,
+        chars: /[\w-:*]/,
+        check: /^[\w-]*:?:?\*?$/,
+        finalCheck: (str) => /^[\w-]+::\*$/.test(str),
+    },
 ];
