@@ -65,4 +65,16 @@ export const tokenDeclarations: TokenDeclaration[] = [
         check: /^"[^"]*"?$/m,
         finalCheck: (str) => /^"[^"]*"$/m.test(str),
     },
+    {
+        type: TokenType.And,
+        chars: 'and',
+        check: /^an?d?$/,
+        finalCheck: (str) => str === 'and',
+    },
+    {
+        type: TokenType.Or,
+        chars: 'or',
+        check: /^or?$/,
+        finalCheck: (str) => str === 'or',
+    },
 ];
