@@ -1,6 +1,12 @@
 import { HighlightedError, PositionalError } from '../common';
 import { analyzeCode, Token, TokenType } from '../lexer';
-import { AttributeNode, CheckAttributeNode, RootNode, ValueNode } from '../nodes';
+import {
+    AttributeNode,
+    CheckAttributeNode,
+    LogicalExpressionNode,
+    RootNode,
+    ValueNode,
+} from '../nodes';
 
 import { createContext, ParserContext } from './context';
 import { checkTokensOrder, checkUndefinedTokens } from './utils';
@@ -23,7 +29,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(parseCheckAttribute(ctx), source);
+    const root = new RootNode(parseLogicalExpression(ctx), source);
 
     if (!ctx.isEnd()) {
         throw new PositionalError(
@@ -38,6 +44,63 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     checkTokensOrder(codeTokens);
 
     return root;
+}
+
+export function parseLogicalExpression(
+    ctx: ParserContext,
+    precedence = 0,
+): LogicalExpressionNode | CheckAttributeNode {
+    let left: CheckAttributeNode | LogicalExpressionNode = parseCheckAttribute(ctx);
+
+    if (!ctx.checkNext(TokenType.Space, 0)) {
+        return left;
+    }
+
+    while (!ctx.isEnd()) {
+        const spaceBeforeOperator = ctx.getNext(0);
+
+        const operator = ctx.getNext();
+
+        if (![TokenType.And, TokenType.Or].includes(operator.type)) {
+            break;
+        }
+
+        const operatorPrecedence = getPrecedence(operator);
+        if (operatorPrecedence < precedence) {
+            break;
+        }
+
+        const spaceAfterOperator = ctx.getNextOrDie(
+            TokenType.Space,
+            'Failed to parse logical expression, expected space after operator',
+            2,
+        );
+
+        ctx.next(3);
+
+        const right = parseLogicalExpression(ctx, operatorPrecedence + 1);
+
+        left = new LogicalExpressionNode(
+            left,
+            spaceBeforeOperator,
+            operator,
+            spaceAfterOperator,
+            right,
+        );
+    }
+
+    return left;
+}
+
+function getPrecedence(operator: Token): number {
+    switch (operator.type) {
+        case TokenType.Or:
+            return 1;
+        case TokenType.And:
+            return 2;
+        default:
+            throw new Error(`Expected operation, got "${operator.type}"`);
+    }
 }
 
 export function parseCheckAttribute(ctx: ParserContext): CheckAttributeNode {
