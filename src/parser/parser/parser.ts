@@ -2,7 +2,7 @@ import { ValueNode } from '@src/parser/nodes/value.ts';
 
 import { HighlightedError, PositionalError } from '../common';
 import { analyzeCode, Token, TokenType } from '../lexer';
-import { AttributeNode, RootNode } from '../nodes';
+import { AttributeNode, CheckAttributeNode, RootNode } from '../nodes';
 
 import { createContext, ParserContext } from './context';
 
@@ -24,7 +24,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(parseValue(ctx), source);
+    const root = new RootNode(parseCheckAttribute(ctx), source);
 
     if (!ctx.isEnd()) {
         //     throw new PositionalError(
@@ -34,6 +34,34 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     }
 
     return root;
+}
+
+function parseCheckAttribute(ctx: ParserContext): CheckAttributeNode {
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    const attribute = parseAttribute(ctx);
+
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    const operator = ctx.getCurrentToken();
+
+    if (![TokenType.Equal].includes(operator.type)) {
+        throw new PositionalError(`Expected operator token, got ${operator.type}`, operator);
+    }
+
+    ctx.next();
+
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    const value = parseValue(ctx);
+
+    return new CheckAttributeNode(attribute, undefined, operator, undefined, value);
 }
 
 function parseValue(ctx: ParserContext): ValueNode {
