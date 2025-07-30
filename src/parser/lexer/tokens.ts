@@ -7,7 +7,7 @@ export interface TokenDeclaration {
     // проверка частичного совпадения строки
     check?: RegExp | ((text: string) => boolean);
     // финальная проверка
-    finalCheck?: RegExp | ((text: string) => boolean);
+    finalCheck?: (text: string) => boolean;
     // каждый символ этого типа - отдельный токен
     single?: boolean;
 }
@@ -56,6 +56,6 @@ export const tokenDeclarations: TokenDeclaration[] = [
         type: TokenType.Attribute,
         chars: /^[@\w+-]$/,
         check: /^@\w?[\w+-]*$/,
-        finalCheck: /^@\w[\w+-]+$/,
+        finalCheck: (str) => /^@\w[\w+-]+$/.test(str),
     },
 ];

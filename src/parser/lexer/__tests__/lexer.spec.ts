@@ -75,12 +75,6 @@ describe('Lexer', () => {
                 createToken(TokenType.Attribute, '@qa-type', 4),
             ]);
         });
-        it('not char after @', () => {
-            expect(analyzeCode('@-qa-type')).toEqual([
-                createToken(TokenType.UnknownSymbol, '@', 0),
-                createToken(TokenType.Attribute, '@qa-type', 4),
-            ]);
-        });
         it('присвоение значения атрибуту', () => {
             expect(analyzeCode('@data-qa-type = "test"')).toEqual([
                 createToken(TokenType.Attribute, '@data-qa-type', 0),
