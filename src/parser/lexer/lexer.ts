@@ -128,5 +128,12 @@ function isRegExp(value: unknown): value is RegExp {
 }
 
 function insertUnknownSymbol(tokens: Token[], buffer: string, index: number) {
-    tokens.push(createToken(TokenType.UnknownSymbol, buffer, index - buffer.length));
+    const lastToken = tokens[tokens.length - 1];
+
+    if (!lastToken || lastToken.type !== TokenType.UnknownSymbol) {
+        return tokens.push(createToken(TokenType.UnknownSymbol, buffer, index - buffer.length));
+    }
+
+    lastToken.text += buffer;
+    lastToken.end = index;
 }
