@@ -2,13 +2,6 @@ import { createToken } from './create-token';
 import { TokenDeclaration, tokenDeclarations } from './tokens';
 import { Token, TokenType } from './types';
 
-const unknownSymbol: TokenDeclaration = {
-    type: TokenType.UnknownSymbol,
-    chars: /.*/,
-    check: () => true,
-    finalCheck: () => true,
-};
-
 export function analyzeCode(code: string): Token[] {
     const tokens: Token[] = [];
 
@@ -88,7 +81,7 @@ export function analyzeCode(code: string): Token[] {
             insertUnknownSymbol(tokens, buffer, index);
             console.log(tokens);
             reset();
-            continue;
+            throw new Error('No possible tokens found');
         }
 
         if (actualTokens.length > 1) {
