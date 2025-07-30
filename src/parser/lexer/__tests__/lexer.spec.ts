@@ -166,10 +166,10 @@ describe('Lexer', () => {
                 createToken(TokenType.OpeningSquareBracket, '[', 5),
             ]);
         });
-        it('./descendant-or-self::*[', () => {
-            expect(analyzeCode('./descendant-or-self::*[')).toEqual([
-                createToken(TokenType.SelectNode, './descendant-or-self::*', 0),
-                createToken(TokenType.OpeningSquareBracket, '[', 23),
+        it('../descendant-or-self::*[', () => {
+            expect(analyzeCode('../descendant-or-self::*[')).toEqual([
+                createToken(TokenType.SelectNode, '../descendant-or-self::*', 0),
+                createToken(TokenType.OpeningSquareBracket, '[', 24),
             ]);
         });
         it('following::*[', () => {
