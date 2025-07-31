@@ -144,7 +144,10 @@ function parseLogicalExpression(
 
         ctx.next();
 
-        const spaceAfterOperator = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+        const spaceAfterOperator = ctx.getCurrentTokenOrDie(
+            TokenType.Space,
+            'Failed to parse logical expression, expected space after operator',
+        );
 
         const right = parseLogicalExpression(ctx, operatorPrecedence + 1);
 
