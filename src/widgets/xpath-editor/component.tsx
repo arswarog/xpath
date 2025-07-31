@@ -18,6 +18,7 @@ export function XPathEditorComponent({ data, onChange }: IScreenProps) {
             value={code}
             onChange={(e) => onChange?.(e.target.value)}
             autoFocus
+            rows={15}
         />
     );
 }
