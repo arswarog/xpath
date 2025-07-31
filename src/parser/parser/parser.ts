@@ -48,30 +48,17 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 }
 
 function parsePredicate(ctx: ParserContext): PredicateNode {
-    const open = ctx.getCurrentToken();
-    if (open.type !== TokenType.OpeningSquareBracket) {
-        throw new PositionalError(`Expected opening round bracket, got ${open.type}`, open);
-    }
+    const open = ctx.getCurrentTokenOrDie(TokenType.OpeningSquareBracket);
     ctx.next();
 
-    let spaceAfterOpen: Token | undefined;
-    if (ctx.getCurrentToken().type === TokenType.Space) {
-        spaceAfterOpen = ctx.getCurrentToken();
-        ctx.next();
-    }
+    const spaceAfterOpen = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
 
     const expression = parseLogicalExpression(ctx);
 
-    let spaceBeforeClose: Token | undefined;
-    if (ctx.getCurrentToken().type === TokenType.Space) {
-        spaceBeforeClose = ctx.getCurrentToken();
-        ctx.next();
-    }
+    const spaceBeforeClose = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
 
-    const close = ctx.getCurrentToken();
-    if (close.type !== TokenType.ClosingSquareBracket) {
-        throw new PositionalError(`Expected closing round bracket, got ${close.type}`, close);
-    }
+    const close = ctx.getCurrentTokenOrDie(TokenType.ClosingSquareBracket);
+    ctx.next();
 
     return new PredicateNode(open, spaceAfterOpen, expression, spaceBeforeClose, close);
 }

@@ -1,8 +1,8 @@
-import { CheckAttributeNode, LogicalExpressionNode } from '@src/parser';
-
 import { Token } from '../lexer';
 
 import { AbstractNode, NodeType } from './abstract';
+import type { CheckAttributeNode } from './check-attribute';
+import type { LogicalExpressionNode } from './logical-expression';
 
 export class PredicateNode extends AbstractNode {
     public readonly type = NodeType.Predicate;
@@ -18,5 +18,15 @@ export class PredicateNode extends AbstractNode {
 
         this.start = open.start;
         this.end = close.end;
+    }
+
+    public getTokens(): Token[] {
+        return [
+            this.open,
+            this.spaceAfterOpen,
+            ...this.expression.getTokens(),
+            this.spaceBeforeClose,
+            this.close,
+        ].filter(Boolean) as Token[];
     }
 }
