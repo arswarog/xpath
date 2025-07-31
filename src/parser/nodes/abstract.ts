@@ -4,6 +4,7 @@ import { Token } from '../lexer';
 export enum NodeType {
     Detached,
     Root,
+    Predicate,
     Attribute,
     Value,
     CheckAttribute,
