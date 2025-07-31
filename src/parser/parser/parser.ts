@@ -1,8 +1,13 @@
-import { ValueNode } from '@src/parser/nodes/value.ts';
-
 import { HighlightedError, PositionalError } from '../common';
 import { analyzeCode, Token, TokenType } from '../lexer';
-import { AttributeNode, CheckAttributeNode, LogicalExpressionNode, RootNode } from '../nodes';
+import {
+    AttributeNode,
+    CheckAttributeNode,
+    LogicalExpressionNode,
+    PredicateNode,
+    RootNode,
+    ValueNode,
+} from '../nodes';
 
 import { createContext, ParserContext } from './context';
 
@@ -24,7 +29,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(parseLogicalExpression(ctx), source);
+    const root = new RootNode(parsePredicate(ctx), source);
 
     if (!ctx.isEnd()) {
         //     throw new PositionalError(
@@ -34,6 +39,35 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     }
 
     return root;
+}
+
+function parsePredicate(ctx: ParserContext): PredicateNode {
+    const open = ctx.getCurrentToken();
+    if (open.type !== TokenType.OpeningSquareBracket) {
+        throw new PositionalError(`Expected opening round bracket, got ${open.type}`, open);
+    }
+    ctx.next();
+
+    let spaceAfterOpen: Token | undefined;
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        spaceAfterOpen = ctx.getCurrentToken();
+        ctx.next();
+    }
+
+    const expression = parseLogicalExpression(ctx);
+
+    let spaceBeforeClose: Token | undefined;
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        spaceBeforeClose = ctx.getCurrentToken();
+        ctx.next();
+    }
+
+    const close = ctx.getCurrentToken();
+    if (close.type !== TokenType.ClosingSquareBracket) {
+        throw new PositionalError(`Expected closing round bracket, got ${close.type}`, close);
+    }
+
+    return new PredicateNode(open, spaceAfterOpen, expression, spaceBeforeClose, close);
 }
 
 function parseLogicalExpression(

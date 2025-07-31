@@ -3,6 +3,7 @@ import { Positionable } from '../common';
 export enum NodeType {
     Detached,
     Root,
+    Predicate,
     Attribute,
     Value,
     CheckAttribute,
