@@ -9,7 +9,7 @@ export class ValueNode extends AbstractNode {
     public readonly value: string;
     public readonly raw: string;
 
-    constructor(valueToken: Token) {
+    constructor(private valueToken: Token) {
         super();
 
         if (valueToken.type !== TokenType.StringLiteral) {
@@ -24,5 +24,9 @@ export class ValueNode extends AbstractNode {
 
         this.start = valueToken.start;
         this.end = valueToken.end;
+    }
+
+    public getTokens() {
+        return [this.valueToken];
     }
 }

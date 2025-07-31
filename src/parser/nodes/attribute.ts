@@ -9,7 +9,7 @@ export class AttributeNode extends AbstractNode {
     public readonly name: string;
     public readonly raw: string;
 
-    constructor(attributeToken: Token) {
+    constructor(private attributeToken: Token) {
         super();
 
         if (attributeToken.type !== TokenType.Attribute) {
@@ -24,5 +24,9 @@ export class AttributeNode extends AbstractNode {
 
         this.start = attributeToken.start;
         this.end = attributeToken.end;
+    }
+
+    public getTokens() {
+        return [this.attributeToken];
     }
 }

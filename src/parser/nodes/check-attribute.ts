@@ -20,4 +20,14 @@ export class CheckAttributeNode extends AbstractNode {
         this.start = attribute.start;
         this.end = value.end;
     }
+
+    public getTokens(): Token[] {
+        return [
+            ...this.attribute.getTokens(),
+            this.spaceBeforeOperator!,
+            this.operator,
+            this.spaceAfterOperator!,
+            ...this.value.getTokens(),
+        ];
+    }
 }
