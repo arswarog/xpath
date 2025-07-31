@@ -1,12 +1,15 @@
 import { Positionable } from '../common';
-
-import { Value } from './value.type';
+import { Token } from '../lexer';
 
 export enum NodeType {
     Detached,
     Root,
+    Selector,
+    Predicate,
+    Attribute,
     Value,
-    BinaryExpression,
+    CheckAttribute,
+    LogicalExpression,
 }
 
 const INVALID_POSITION = -1;
@@ -17,5 +20,5 @@ export abstract class AbstractNode implements Positionable {
     public start: number = INVALID_POSITION;
     public end: number = INVALID_POSITION;
 
-    public abstract evaluate(): Value;
+    public abstract getTokens(): Token[];
 }

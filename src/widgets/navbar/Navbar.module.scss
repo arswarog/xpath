@@ -1,0 +1,28 @@
+.Navbar {
+    display: block;
+
+    &__list {
+        display: flex;
+        flex-direction: row;
+        list-style: none;
+        padding: 0;
+        margin: 0 5px;
+    }
+
+    &__item {
+        display: inline-block;
+        margin: 0 0.25em;
+        padding: 0 0.25em;
+        transition: 0.3s;
+
+        a {
+            transition: 0.3s;
+        }
+
+        :global(.active) {
+            font-weight: bold;
+            color: #007acc;
+            text-decoration: none;
+        }
+    }
+}

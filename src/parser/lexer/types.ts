@@ -4,14 +4,19 @@ export enum TokenType {
     UnknownSymbol = -1,
     EndOfFile = 0,
     Space,
-    NumericLiteral,
-    PlusOperation,
-    MinusOperation,
-    MultiplyOperation,
-    DivideOperation,
-    HourLiteral,
-    MinuteLiteral,
-    SecondLiteral,
+    Comma,
+    OpeningSquareBracket, // символ '['
+    ClosingSquareBracket, // символ ']'
+    OpeningRoundBracket, // символ '('
+    ClosingRoundBracket, // символ ')'
+    Equal, // символ '='
+    Asterisk, // символ '*'
+    Attribute,
+    StringLiteral,
+    And,
+    Or,
+    SelectNode,
+    Method,
 }
 
 export interface Token extends Positionable {

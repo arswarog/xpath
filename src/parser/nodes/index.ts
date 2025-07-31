@@ -1,4 +1,8 @@
 export { AbstractNode, NodeType } from './abstract';
-export { BinaryExpressionNode } from './binary-expression';
+export { AttributeNode } from './attribute';
+export { CheckAttributeNode } from './check-attribute';
+export { LogicalExpressionNode } from './logical-expression';
+export { PredicateNode } from './predicate';
 export { RootNode } from './root';
+export { SelectorNode } from './selector';
 export { ValueNode } from './value';

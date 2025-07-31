@@ -1,6 +1,14 @@
 import { HighlightedError, PositionalError } from '../common';
 import { analyzeCode, Token, TokenType } from '../lexer';
-import { BinaryExpressionNode, RootNode, ValueNode } from '../nodes';
+import {
+    AttributeNode,
+    CheckAttributeNode,
+    LogicalExpressionNode,
+    PredicateNode,
+    RootNode,
+    SelectorNode,
+    ValueNode,
+} from '../nodes';
 
 import { createContext, ParserContext } from './context';
 
@@ -22,71 +30,152 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(parseBinaryExpression(ctx), source);
+    const startSpace = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+    const selector = parseSelector(ctx);
+    const endSpace = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const root = new RootNode(startSpace, selector, endSpace, source);
 
     if (!ctx.isEnd()) {
-        throw new PositionalError(
-            `Unexpected token "${ctx.getCurrentToken().text}" (${TokenType[ctx.getCurrentToken().type]})`,
-            ctx.getCurrentToken(),
-        );
+        //     throw new PositionalError(
+        //         `Unexpected token "${ctx.getCurrentToken().text}" (${TokenType[ctx.getCurrentToken().type]})`,
+        //         ctx.getCurrentToken(),
+        //     );
     }
 
     return root;
 }
 
-function parseBinaryExpression(
+function parseSelector(ctx: ParserContext): SelectorNode {
+    const selectNode = parseSelectNode(ctx);
+
+    const spaceBeforePredicate = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+    const predicate = parsePredicate(ctx);
+
+    return new SelectorNode(selectNode, [[spaceBeforePredicate, predicate]]);
+}
+
+function parseSelectNode(ctx: ParserContext): Token {
+    const token = ctx.getCurrentTokenOrDie(TokenType.SelectNode);
+    ctx.next();
+    return token;
+}
+
+function parsePredicate(ctx: ParserContext): PredicateNode {
+    const open = ctx.getCurrentTokenOrDie(TokenType.OpeningSquareBracket);
+    ctx.next();
+
+    const spaceAfterOpen = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const expression = parseLogicalExpression(ctx);
+
+    const spaceBeforeClose = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const close = ctx.getCurrentTokenOrDie(TokenType.ClosingSquareBracket);
+    ctx.next();
+
+    return new PredicateNode(open, spaceAfterOpen, expression, spaceBeforeClose, close);
+}
+
+function parseLogicalExpression(
     ctx: ParserContext,
     precedence = 0,
-): BinaryExpressionNode | ValueNode {
-    let left = parseValue(ctx);
+): LogicalExpressionNode | CheckAttributeNode {
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    let left: CheckAttributeNode | LogicalExpressionNode = parseCheckAttribute(ctx);
+
+    const spaceBeforeOperator = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
 
     while (!ctx.isEnd()) {
         const operator = ctx.getCurrentToken();
 
-        if (
-            ![
-                TokenType.PlusOperation,
-                TokenType.MinusOperation,
-                TokenType.MultiplyOperation,
-                TokenType.DivideOperation,
-            ].includes(operator.type)
-        ) {
+        if (![TokenType.And, TokenType.Or].includes(operator.type)) {
             break;
         }
 
         const operatorPrecedence = getPrecedence(operator);
-        if (operatorPrecedence < precedence) break;
+        if (operatorPrecedence < precedence) {
+            break;
+        }
 
         ctx.next();
 
-        const right = parseBinaryExpression(ctx, operatorPrecedence + 1);
+        const spaceAfterOperator = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
 
-        left = new BinaryExpressionNode(operator, left, right);
+        const right = parseLogicalExpression(ctx, operatorPrecedence + 1);
+
+        left = new LogicalExpressionNode(
+            left,
+            spaceBeforeOperator,
+            operator,
+            spaceAfterOperator,
+            right,
+        );
     }
 
     return left;
 }
 
-function parseValue(ctx: ParserContext): BinaryExpressionNode | ValueNode {
-    const value = ctx.getCurrentToken();
-
-    if (value.type === TokenType.NumericLiteral) {
-        ctx.next();
-        return new ValueNode(value);
-    }
-
-    throw new PositionalError(`Expected value, got "${value.text}"`, ctx.getCurrentToken());
-}
-
 function getPrecedence(operator: Token): number {
     switch (operator.type) {
-        case TokenType.PlusOperation:
-        case TokenType.MinusOperation:
+        case TokenType.Or:
             return 1;
-        case TokenType.MultiplyOperation:
-        case TokenType.DivideOperation:
+        case TokenType.And:
             return 2;
         default:
             throw new Error(`Expected operation, got "${operator.type}"`);
     }
+}
+
+function parseCheckAttribute(ctx: ParserContext): CheckAttributeNode {
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    const attribute = parseAttribute(ctx);
+
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    const operator = ctx.getCurrentToken();
+
+    if (![TokenType.Equal].includes(operator.type)) {
+        throw new PositionalError(`Expected operator token, got ${operator.type}`, operator);
+    }
+
+    ctx.next();
+
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    const value = parseValue(ctx);
+
+    return new CheckAttributeNode(attribute, undefined, operator, undefined, value);
+}
+
+function parseValue(ctx: ParserContext): ValueNode {
+    const value = ctx.getCurrentToken();
+
+    if (value.type === TokenType.StringLiteral) {
+        ctx.next();
+        return new ValueNode(value);
+    }
+
+    throw new PositionalError(`Expected value token, got ${value.type}`, value);
+}
+
+function parseAttribute(ctx: ParserContext): AttributeNode {
+    const attr = ctx.getCurrentToken();
+
+    if (attr.type === TokenType.Attribute) {
+        ctx.next();
+        return new AttributeNode(attr);
+    }
+
+    throw new PositionalError(`Expected attribute token, got ${attr.type}`, attr);
 }

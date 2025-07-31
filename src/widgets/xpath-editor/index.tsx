@@ -3,15 +3,15 @@ import { useAction, useAtom } from '@reatom/npm-react';
 import { changeExpressionAction } from '@src/entities/expression';
 
 import { screenAtom } from './atom';
-import { ScreenComponent } from './component';
+import { XPathEditorComponent } from './component';
 
-export function Screen() {
+export function XPathEditor() {
     const [data] = useAtom(screenAtom);
 
     const handleChange = useAction(changeExpressionAction);
 
     return (
-        <ScreenComponent
+        <XPathEditorComponent
             data={data}
             onChange={handleChange}
         />

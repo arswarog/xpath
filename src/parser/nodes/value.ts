@@ -1,35 +1,32 @@
+import { PositionalError } from '@src/parser';
+
 import { Token, TokenType } from '../lexer';
 
 import { AbstractNode, NodeType } from './abstract';
-import { Value, ValueType } from './value.type';
 
 export class ValueNode extends AbstractNode {
     public readonly type = NodeType.Value;
-    public readonly value: Value;
+    public readonly value: string;
+    public readonly raw: string;
 
-    constructor(valueToken: Token) {
+    constructor(private valueToken: Token) {
         super();
 
-        switch (valueToken.type) {
-            case TokenType.NumericLiteral:
-                if (!Number.isFinite(parseInt(valueToken.text))) {
-                    throw new Error(`Invalid number "${valueToken.text}"`);
-                }
-
-                this.value = {
-                    type: ValueType.Number,
-                    value: parseInt(valueToken.text),
-                };
-                break;
-            default:
-                throw new Error(`Unexpected token type: ${valueToken.type}`);
+        if (valueToken.type !== TokenType.StringLiteral) {
+            throw new PositionalError(
+                `Expected string literal, got ${valueToken.type}`,
+                valueToken,
+            );
         }
+
+        this.value = valueToken.text;
+        this.raw = valueToken.text;
 
         this.start = valueToken.start;
         this.end = valueToken.end;
     }
 
-    public evaluate(): Value {
-        return this.value;
+    public getTokens() {
+        return [this.valueToken];
     }
 }
