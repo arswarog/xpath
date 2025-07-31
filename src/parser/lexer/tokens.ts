@@ -100,4 +100,10 @@ export const tokenDeclarations: TokenDeclaration[] = [
         check: /^[\w-]*:?:?\*?$/,
         finalCheck: (str) => /^[\w-]+::\*$/.test(str),
     },
+    {
+        type: TokenType.Method,
+        chars: /[\w-]/,
+        check: /^[\w-]*$/,
+        finalCheck: (str) => /^[\w-]+$/.test(str),
+    },
 ];

@@ -16,6 +16,7 @@ export enum TokenType {
     And,
     Or,
     SelectNode,
+    Method,
 }
 
 export interface Token extends Positionable {

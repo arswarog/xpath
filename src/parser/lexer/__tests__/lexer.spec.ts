@@ -139,7 +139,7 @@ describe('Lexer', () => {
         });
         it('attribute not starting with @', () => {
             expect(analyzeCode('data@qa-type')).toEqual([
-                createToken(TokenType.UnknownSymbol, 'data', 0),
+                createToken(TokenType.Method, 'data', 0),
                 createToken(TokenType.Attribute, '@qa-type', 4),
             ]);
         });
@@ -195,15 +195,15 @@ describe('Lexer', () => {
         });
         it('translate(n', () => {
             expect(analyzeCode('translate(n')).toEqual([
-                createToken(TokenType.UnknownSymbol, 'translate', 0),
+                createToken(TokenType.Method, 'translate', 0),
                 createToken(TokenType.OpeningRoundBracket, '(', 9),
-                createToken(TokenType.UnknownSymbol, 'n', 10),
+                createToken(TokenType.Method, 'n', 10),
             ]);
         });
         it('[translate(@value', () => {
             expect(analyzeCode('[translate(@value')).toEqual([
                 createToken(TokenType.OpeningSquareBracket, '[', 0),
-                createToken(TokenType.UnknownSymbol, 'translate', 1),
+                createToken(TokenType.Method, 'translate', 1),
                 createToken(TokenType.OpeningRoundBracket, '(', 10),
                 createToken(TokenType.Attribute, '@value', 11),
             ]);
