@@ -4,6 +4,7 @@ import { Token } from '@src/parser';
 import { SyntaxTheme } from '@src/shared/syntax-theme';
 
 import styles from './TokenizedCodeView.module.scss';
+import { tokensMap } from './tokens-map';
 
 interface TokenizedCodeViewProps {
     tokens: Token[];
@@ -15,9 +16,11 @@ export function TokenizedCodeView({ tokens }: TokenizedCodeViewProps) {
     return (
         <div className={b()}>
             <SyntaxTheme fontSize="16px">
-                {tokens.map((token) => (
-                    <span key={token.start}>{token.text}</span>
-                ))}
+                {tokens.map((token) => {
+                    const Component = tokensMap[token.type];
+
+                    return <Component>{token.text}</Component>;
+                })}
             </SyntaxTheme>
         </div>
     );
