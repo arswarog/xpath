@@ -15,7 +15,7 @@ const b = block(styles, 'TokenizedCodeView');
 export function TokenizedCodeView({ tokens }: TokenizedCodeViewProps) {
     return (
         <div className={b()}>
-            <SyntaxTheme fontSize="16px">
+            <SyntaxTheme fontSize="1.2rem">
                 {tokens.map((token) => {
                     const Component = tokensMap[token.type];
 
