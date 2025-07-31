@@ -18,6 +18,11 @@ export const tokenDeclarations: TokenDeclaration[] = [
         chars: ' \n\t',
     },
     {
+        type: TokenType.Comma,
+        chars: ',',
+        single: true,
+    },
+    {
         type: TokenType.OpeningSquareBracket,
         chars: '[',
         single: true,

@@ -5,6 +5,7 @@ export const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
     [TokenType.UnknownSymbol]: SyntaxTheme.Error,
     [TokenType.EndOfFile]: SyntaxTheme.Regular,
     [TokenType.Space]: SyntaxTheme.Regular,
+    [TokenType.Comma]: SyntaxTheme.Regular,
     [TokenType.OpeningSquareBracket]: SyntaxTheme.Regular,
     [TokenType.ClosingSquareBracket]: SyntaxTheme.Regular,
     [TokenType.OpeningRoundBracket]: SyntaxTheme.Regular,
