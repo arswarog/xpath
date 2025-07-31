@@ -56,13 +56,16 @@ function parseSelector(ctx: ParserContext): SelectorNode {
 }
 
 function parseSelectNode(ctx: ParserContext): Token {
-    const token = ctx.getCurrentTokenOrDie(TokenType.SelectNode);
+    const token = ctx.getCurrentTokenOrDie(TokenType.SelectNode, 'Failed to parse node');
     ctx.next();
     return token;
 }
 
 function parsePredicate(ctx: ParserContext): PredicateNode {
-    const open = ctx.getCurrentTokenOrDie(TokenType.OpeningSquareBracket);
+    const open = ctx.getCurrentTokenOrDie(
+        TokenType.OpeningSquareBracket,
+        'Failed to parse predicate',
+    );
     ctx.next();
 
     const spaceAfterOpen = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
@@ -71,7 +74,10 @@ function parsePredicate(ctx: ParserContext): PredicateNode {
 
     const spaceBeforeClose = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
 
-    const close = ctx.getCurrentTokenOrDie(TokenType.ClosingSquareBracket);
+    const close = ctx.getCurrentTokenOrDie(
+        TokenType.ClosingSquareBracket,
+        'Failed to parse predicate',
+    );
     ctx.next();
 
     return new PredicateNode(open, spaceAfterOpen, expression, spaceBeforeClose, close);
@@ -170,12 +176,8 @@ function parseValue(ctx: ParserContext): ValueNode {
 }
 
 function parseAttribute(ctx: ParserContext): AttributeNode {
-    const attr = ctx.getCurrentToken();
+    const attr = ctx.getCurrentTokenOrDie(TokenType.Attribute, 'Failed to parse attribute');
+    ctx.next();
 
-    if (attr.type === TokenType.Attribute) {
-        ctx.next();
-        return new AttributeNode(attr);
-    }
-
-    throw new PositionalError(`Expected attribute token, got ${attr.type}`, attr);
+    return new AttributeNode(attr);
 }
