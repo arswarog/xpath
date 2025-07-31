@@ -13,6 +13,9 @@ export function Navbar() {
                     <NavLink to="/highlight">#highlight</NavLink>
                 </li>
                 <li className={b('item')}>
+                    <NavLink to="/code">#code</NavLink>
+                </li>
+                <li className={b('item')}>
                     <NavLink to="/tokens">#tokens</NavLink>
                 </li>
                 <li className={b('item')}>
