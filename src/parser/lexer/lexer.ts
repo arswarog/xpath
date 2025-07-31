@@ -1,3 +1,5 @@
+import { PositionalError } from '@src/parser';
+
 import { createToken } from './create-token';
 import { TokenDeclaration, tokenDeclarations } from './tokens';
 import { Token, TokenType } from './types';
@@ -28,6 +30,8 @@ export function analyzeCode(code: string): Token[] {
         }
 
         const nextPossibleTokens = filterPossibleTokens(char, buffer + char, possibleTokens);
+
+        console.log(nextPossibleTokens);
 
         if (nextPossibleTokens.length === 0 && !buffer) {
             insertUnknownSymbol(tokens, char, index + 1);
@@ -90,12 +94,22 @@ export function analyzeCode(code: string): Token[] {
             });
         }
 
-        const completeTokens = actualTokens.filter(({ finalCheck }) => {
+        const completeTokens = actualTokens.filter(({ type, check, finalCheck }) => {
             if (!finalCheck) {
                 return true;
             }
 
-            return finalCheck(buffer);
+            const result = finalCheck(buffer);
+
+            console.log({
+                buffer,
+                type,
+                check,
+                finalCheck,
+                result,
+            });
+
+            return result;
         });
 
         if (completeTokens.length === 0) {
@@ -113,7 +127,7 @@ export function analyzeCode(code: string): Token[] {
             });
         }
 
-        const { type } = actualTokens[0];
+        const { type } = completeTokens[0];
 
         tokens.push(createToken(type, buffer, index - buffer.length));
 
@@ -129,26 +143,40 @@ function filterPossibleTokens(
     list: TokenDeclaration[],
 ): TokenDeclaration[] {
     return list
-        .filter(({ chars }) => {
+        .filter(({ chars, type }) => {
+            console.log(`char: ${char}, ${TokenType[type]}`);
+
             if (char && typeof chars === 'string') {
                 if (chars.includes(char)) {
+                    console.log('ok');
                     return true;
                 }
             }
 
             if (isRegExp(chars)) {
                 if (chars.test(char)) {
+                    console.log('ok');
                     return true;
                 }
             }
         })
-        .filter(({ check }) => {
+        .filter(({ check, type }) => {
+            console.log(`buffer: ${buffer}, ${TokenType[type]}`);
+
             if (!check) {
+                console.log('skip check');
                 return true;
             }
 
             if (isRegExp(check)) {
+                if (check.test(buffer)) {
+                    console.log('ok');
+                }
                 return check.test(buffer);
+            }
+
+            if (check(buffer)) {
+                console.log('ok');
             }
 
             return check(buffer);
