@@ -6,6 +6,7 @@ import {
     LogicalExpressionNode,
     PredicateNode,
     RootNode,
+    SelectorNode,
     ValueNode,
 } from '../nodes';
 
@@ -30,7 +31,11 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(parsePredicate(ctx), source);
+    const startSpace = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+    const selector = parseSelector(ctx);
+    const endSpace = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const root = new RootNode(startSpace, selector, endSpace, source);
 
     if (!ctx.isEnd()) {
         //     throw new PositionalError(
@@ -45,6 +50,21 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     checkTokensOrder(codeTokens);
 
     return root;
+}
+
+function parseSelector(ctx: ParserContext): SelectorNode {
+    const selectNode = parseSelectNode(ctx);
+
+    const spaceBeforePredicate = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+    const predicate = parsePredicate(ctx);
+
+    return new SelectorNode(selectNode, [[spaceBeforePredicate, predicate]]);
+}
+
+function parseSelectNode(ctx: ParserContext): Token {
+    const token = ctx.getCurrentTokenOrDie(TokenType.SelectNode);
+    ctx.next();
+    return token;
 }
 
 function parsePredicate(ctx: ParserContext): PredicateNode {
