@@ -5,7 +5,7 @@ export interface ParserContext {
     index: number;
     getCurrentToken(): Token;
     getCurrentTokenIfTypeAndNext(type: TokenType): Token | undefined;
-    getCurrentTokenOrDie(type: TokenType): Token;
+    getCurrentTokenOrDie(type: TokenType, errorMessage: string): Token;
     next(): void;
     isEnd(): boolean;
     getText(): string;
@@ -40,7 +40,7 @@ export function createContext(tokens: Token[]): ParserContext {
 
             return token;
         },
-        getCurrentTokenOrDie(type: TokenType) {
+        getCurrentTokenOrDie(type: TokenType, errorMessage: string) {
             const token = getCurrentToken();
 
             if (token.type === type) {
@@ -48,7 +48,7 @@ export function createContext(tokens: Token[]): ParserContext {
             }
 
             throw new PositionalError(
-                `Expected token ${TokenType[type]}, got ${TokenType[token.type]}`,
+                `${errorMessage}\nExpected token ${TokenType[type]}, got ${TokenType[token.type]}`,
                 {
                     start: token.start,
                     end: token.end,
