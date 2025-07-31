@@ -94,7 +94,7 @@ export function analyzeCode(code: string): Token[] {
             });
         }
 
-        const completeTokens = actualTokens.filter(({ type, check, finalCheck }) => {
+        let completeTokens = actualTokens.filter(({ type, check, finalCheck }) => {
             if (!finalCheck) {
                 return true;
             }
@@ -118,6 +118,10 @@ export function analyzeCode(code: string): Token[] {
             reset();
 
             continue;
+        }
+
+        if (completeTokens.length > 1) {
+            completeTokens = completeTokens.filter(({ constString }) => constString);
         }
 
         if (completeTokens.length > 1) {
