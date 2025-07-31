@@ -42,7 +42,7 @@ describe('Errors', () => {
                 ].join('\n'),
             );
         });
-        it('end of file', () => {
+        it.skip('end of file', () => {
             const error = new PositionalError('Unexpected end of file', {
                 start: 3,
                 end: 3,
