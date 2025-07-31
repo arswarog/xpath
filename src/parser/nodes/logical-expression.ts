@@ -8,9 +8,9 @@ export class LogicalExpressionNode extends AbstractNode {
 
     constructor(
         public left: CheckAttributeNode | LogicalExpressionNode,
-        public spaceBeforeOperator: Token | undefined,
+        public spaceBeforeOperator: Token,
         public operator: Token,
-        public spaceAfterOperator: Token | undefined,
+        public spaceAfterOperator: Token,
         public right: CheckAttributeNode | LogicalExpressionNode,
     ) {
         super();
@@ -26,6 +26,6 @@ export class LogicalExpressionNode extends AbstractNode {
             this.operator,
             this.spaceAfterOperator,
             ...this.right.getTokens(),
-        ].filter(Boolean) as Token[];
+        ];
     }
 }
