@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router';
 
 import { AstViewPage } from '@src/pages/ast-view';
+import { CodePage } from '@src/pages/code';
 import { DevLayout } from '@src/pages/dev-layout';
 import { HighlightPage } from '@src/pages/highlight';
 import { TokensViewPage } from '@src/pages/tokens-view';
@@ -14,6 +15,10 @@ export function App() {
                 <Route
                     path="highlight"
                     element={<HighlightPage />}
+                />
+                <Route
+                    path="code"
+                    element={<CodePage />}
                 />
                 <Route
                     path="ast"
