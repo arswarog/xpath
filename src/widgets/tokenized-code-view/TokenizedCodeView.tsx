@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import block from 'bem-css-modules';
 
 import { Token } from '@src/parser';
@@ -13,9 +15,32 @@ interface TokenizedCodeViewProps {
 const b = block(styles, 'TokenizedCodeView');
 
 export function TokenizedCodeView({ tokens }: TokenizedCodeViewProps) {
+    const codeRef = useRef<HTMLPreElement>(null);
+
+    const copyCode = () => {
+        if (codeRef.current) {
+            const textToCopy = codeRef.current.innerText;
+            navigator.clipboard
+                .writeText(textToCopy)
+                .then(() => alert('Текст скопирован!'))
+                .catch(() => alert('Ошибка при копировании'));
+        }
+    };
+
     return (
         <div className={b()}>
-            <SyntaxTheme fontSize="1.2rem">
+            <div className={b('toolbar')}>
+                <button
+                    className={b('toolbar-item')}
+                    onClick={copyCode}
+                >
+                    Copy
+                </button>
+            </div>
+            <SyntaxTheme
+                fontSize="1.2rem"
+                ref={codeRef}
+            >
                 {tokens.map((token) => {
                     const Component = tokensMap[token.type];
 

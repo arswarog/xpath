@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, PropsWithChildren } from 'react';
+import { FC, forwardRef, HTMLAttributes, PropsWithChildren } from 'react';
 
 import block from 'bem-css-modules';
 
@@ -12,16 +12,19 @@ interface SyntaxThemeProps {
     fontSize?: string;
 }
 
-function SyntaxThemeComponent({ children, fontSize }: PropsWithChildren<SyntaxThemeProps>) {
-    return (
-        <pre
-            className={b()}
-            style={{ fontSize }}
-        >
-            {children}
-        </pre>
-    );
-}
+const SyntaxThemeComponent = forwardRef<HTMLPreElement, PropsWithChildren<SyntaxThemeProps>>(
+    ({ children, fontSize }, ref) => {
+        return (
+            <pre
+                ref={ref}
+                className={b()}
+                style={{ fontSize }}
+            >
+                {children}
+            </pre>
+        );
+    },
+);
 
 export const SyntaxTheme = createCompositeComponent(SyntaxThemeComponent, 'SyntaxTheme', {
     Regular: componentFactory('regular'),
