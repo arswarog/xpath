@@ -4,6 +4,7 @@ export enum TokenType {
     UnknownSymbol = -1,
     EndOfFile = 0,
     Space,
+    Comma,
     OpeningSquareBracket, // символ '['
     ClosingSquareBracket, // символ ']'
     OpeningRoundBracket, // символ '('
