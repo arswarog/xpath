@@ -1,21 +1,26 @@
 import { Token } from '../lexer';
 
 import { AbstractNode, NodeType } from './abstract';
+import { SelectorNode } from './selector.ts';
 
 export class RootNode extends AbstractNode {
     public readonly type = NodeType.Root;
 
     constructor(
-        public expression: AbstractNode,
+        public startSpace: Token | undefined,
+        public selector: SelectorNode,
+        public endSpace: Token | undefined,
         public source: string,
     ) {
         super();
 
-        this.start = expression.start;
-        this.end = expression.end;
+        this.start = startSpace?.start || selector.start;
+        this.end = endSpace?.end || selector.end;
     }
 
     public getTokens(): Token[] {
-        return this.expression.getTokens();
+        return [this.startSpace, ...this.selector.getTokens(), this.endSpace].filter(
+            Boolean,
+        ) as Token[];
     }
 }
