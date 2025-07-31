@@ -1,4 +1,5 @@
 import { Positionable } from '../common';
+import { Token } from '../lexer';
 
 export enum NodeType {
     Detached,
@@ -17,4 +18,6 @@ export abstract class AbstractNode implements Positionable {
 
     public start: number = INVALID_POSITION;
     public end: number = INVALID_POSITION;
+
+    public abstract getTokens(): Token[];
 }
