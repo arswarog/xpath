@@ -22,10 +22,10 @@ export class LogicalExpressionNode extends AbstractNode {
     public getTokens(): Token[] {
         return [
             ...this.left.getTokens(),
-            this.spaceBeforeOperator!,
+            this.spaceBeforeOperator,
             this.operator,
-            this.spaceAfterOperator!,
+            this.spaceAfterOperator,
             ...this.right.getTokens(),
-        ];
+        ].filter(Boolean) as Token[];
     }
 }

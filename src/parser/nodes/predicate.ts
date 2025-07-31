@@ -23,10 +23,10 @@ export class PredicateNode extends AbstractNode {
     public getTokens(): Token[] {
         return [
             this.open,
-            this.spaceAfterOpen!,
+            this.spaceAfterOpen,
             ...this.expression.getTokens(),
-            this.spaceBeforeClose!,
+            this.spaceBeforeClose,
             this.close,
-        ];
+        ].filter(Boolean) as Token[];
     }
 }
