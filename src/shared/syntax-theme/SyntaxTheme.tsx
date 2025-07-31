@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from 'react';
+import { FC, HTMLAttributes, PropsWithChildren } from 'react';
 
 import block from 'bem-css-modules';
 
@@ -36,11 +36,16 @@ export const SyntaxTheme = createCompositeComponent(SyntaxThemeComponent, 'Synta
     Error: componentFactory('error'),
 });
 
-export type SyntaxThemeItem = FC<PropsWithChildren<object>>;
+export type SyntaxThemeItem = FC<PropsWithChildren<HTMLAttributes<HTMLSpanElement>>>;
 
 function componentFactory(styleName: string): SyntaxThemeItem {
-    const Component: FC<PropsWithChildren<object>> = ({ children }) => (
-        <span className={b(styleName)}>{children}</span>
+    const Component: SyntaxThemeItem = ({ children, className, ...props }) => (
+        <span
+            {...props}
+            className={b(styleName) + (className ? ` ${className}` : '')}
+        >
+            {children}
+        </span>
     );
 
     Component.displayName = `SyntaxTheme.${styleName}`;
