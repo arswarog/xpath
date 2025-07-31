@@ -1,6 +1,7 @@
 import { Token } from '../lexer';
 
 import { AbstractNode, NodeType } from './abstract';
+import type { BracketedExpressionNode } from './bracketed-expression';
 import type { CheckAttributeNode } from './check-attribute';
 import type { LogicalExpressionNode } from './logical-expression';
 
@@ -10,7 +11,7 @@ export class PredicateNode extends AbstractNode {
     constructor(
         public open: Token,
         public spaceAfterOpen: Token | undefined,
-        public expression: CheckAttributeNode | LogicalExpressionNode,
+        public expression: BracketedExpressionNode | CheckAttributeNode | LogicalExpressionNode,
         public spaceBeforeClose: Token | undefined,
         public close: Token,
     ) {

@@ -2,6 +2,7 @@ import { HighlightedError, PositionalError } from '../common';
 import { analyzeCode, Token, TokenType } from '../lexer';
 import {
     AttributeNode,
+    BracketedExpressionNode,
     CheckAttributeNode,
     LogicalExpressionNode,
     PredicateNode,
@@ -76,7 +77,7 @@ function parsePredicate(ctx: ParserContext): PredicateNode {
 
     const spaceAfterOpen = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
 
-    const expression = parseLogicalExpression(ctx);
+    const expression = parseBracketedExpression(ctx);
 
     const spaceBeforeClose = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
 
@@ -87,6 +88,40 @@ function parsePredicate(ctx: ParserContext): PredicateNode {
     ctx.next();
 
     return new PredicateNode(open, spaceAfterOpen, expression, spaceBeforeClose, close);
+}
+
+export function parseBracketedExpression(
+    ctx: ParserContext,
+): BracketedExpressionNode | CheckAttributeNode | LogicalExpressionNode {
+    if (ctx.getCurrentToken().type !== TokenType.OpeningRoundBracket) {
+        return parseLogicalExpression(ctx);
+    }
+
+    const openingBracket = ctx.getCurrentTokenOrDie(
+        TokenType.OpeningRoundBracket,
+        'Failed to parse bracketed expression',
+    );
+    ctx.next();
+
+    const spaceBeforeExpression = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const expression = parseBracketedExpression(ctx);
+
+    const spaceAfterExpression = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const closingBracket = ctx.getCurrentTokenOrDie(
+        TokenType.ClosingRoundBracket,
+        'Failed to parse bracketed expression',
+    );
+    ctx.next();
+
+    return new BracketedExpressionNode(
+        openingBracket,
+        spaceBeforeExpression,
+        expression,
+        spaceAfterExpression,
+        closingBracket,
+    );
 }
 
 export function parseLogicalExpression(
