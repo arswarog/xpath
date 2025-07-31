@@ -154,6 +154,22 @@ describe('Lexer', () => {
         });
     });
     describe('Select node', () => {
+        it('normalize-space(.)', () => {
+            expect(analyzeCode('normalize-space(.)')).toEqual([
+                createToken(TokenType.Method, 'normalize-space', 0),
+                createToken(TokenType.OpeningRoundBracket, '(', 15),
+                createToken(TokenType.SelectNode, '.', 16),
+                createToken(TokenType.ClosingRoundBracket, ')', 17),
+            ]);
+        });
+        it('normalize-space(..)', () => {
+            expect(analyzeCode('normalize-space(..)')).toEqual([
+                createToken(TokenType.Method, 'normalize-space', 0),
+                createToken(TokenType.OpeningRoundBracket, '(', 15),
+                createToken(TokenType.SelectNode, '..', 16),
+                createToken(TokenType.ClosingRoundBracket, ')', 18),
+            ]);
+        });
         it('.//*[', () => {
             expect(analyzeCode('.//*[')).toEqual([
                 createToken(TokenType.SelectNode, './/*', 0),

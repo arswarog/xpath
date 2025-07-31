@@ -90,7 +90,7 @@ export const tokenDeclarations: TokenDeclaration[] = [
         type: TokenType.SelectNode,
         chars: /[.*/]/,
         check: /^\.\.?\/?\/?\*?$/,
-        finalCheck: (str) => ['.//*', '..//*'].includes(str),
+        finalCheck: (str) => ['.', '..', './/*', '..//*'].includes(str),
     },
     {
         type: TokenType.SelectNode,
