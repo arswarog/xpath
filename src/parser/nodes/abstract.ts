@@ -10,6 +10,7 @@ export enum NodeType {
     Value,
     CheckAttribute,
     LogicalExpression,
+    BracketedExpression,
 }
 
 const INVALID_POSITION = -1;
