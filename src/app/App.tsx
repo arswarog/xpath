@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router';
 
 import { AstViewPage } from '@src/pages/ast-view';
+import { CodePage } from '@src/pages/code';
 import { DevLayout } from '@src/pages/dev-layout';
 import { TokensViewPage } from '@src/pages/tokens-view';
 
@@ -10,6 +11,10 @@ export function App() {
     return (
         <Routes>
             <Route element={<DevLayout />}>
+                <Route
+                    path="code"
+                    element={<CodePage />}
+                />
                 <Route
                     path="ast"
                     element={<AstViewPage />}
