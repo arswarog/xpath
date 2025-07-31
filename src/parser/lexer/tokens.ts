@@ -6,6 +6,8 @@ export interface TokenDeclaration {
     chars: string | RegExp;
     // проверка частичного совпадения строки
     check?: RegExp | ((text: string) => boolean);
+    // токен представляет конкретное слово
+    constString?: boolean;
     // финальная проверка
     finalCheck?: (text: string) => boolean;
     // каждый символ этого типа - отдельный токен
@@ -73,12 +75,14 @@ export const tokenDeclarations: TokenDeclaration[] = [
     {
         type: TokenType.And,
         chars: 'and',
+        constString: true,
         check: /^an?d?$/,
         finalCheck: (str) => str === 'and',
     },
     {
         type: TokenType.Or,
         chars: 'or',
+        constString: true,
         check: /^or?$/,
         finalCheck: (str) => str === 'or',
     },
