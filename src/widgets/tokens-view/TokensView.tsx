@@ -26,7 +26,7 @@ export function TokensView({ tokens }: TokensViewProps) {
                     {tokens.map((token) => (
                         <tr
                             key={token.start}
-                            className={b('row')}
+                            className={b('row', { error: token.type === TokenType.UnknownSymbol })}
                         >
                             <td className={b('type')}>{TokenType[token.type]}</td>
                             <td className={b('text')}>
