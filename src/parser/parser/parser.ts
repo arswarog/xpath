@@ -44,6 +44,8 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
         //     );
     }
 
+    // root.getTokens();
+
     return root;
 }
 
@@ -122,15 +124,15 @@ function parseLogicalExpression(
     ctx: ParserContext,
     precedence = 0,
 ): LogicalExpressionNode | CheckAttributeNode {
-    if (ctx.getCurrentToken().type === TokenType.Space) {
-        ctx.next();
-    }
+    // if (ctx.getCurrentToken().type === TokenType.Space) {
+    //     ctx.next();
+    // }
 
     let left: CheckAttributeNode | LogicalExpressionNode = parseCheckAttribute(ctx);
 
-    const spaceBeforeOperator = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
-
     while (!ctx.isEnd()) {
+        const spaceBeforeOperator = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
         const operator = ctx.getCurrentToken();
 
         if (![TokenType.And, TokenType.Or].includes(operator.type)) {
@@ -193,9 +195,9 @@ function parseCheckAttribute(ctx: ParserContext): CheckAttributeNode {
 
     ctx.next();
 
-    if (ctx.getCurrentToken().type === TokenType.Space) {
-        ctx.next();
-    }
+    // if (ctx.getCurrentToken().type === TokenType.Space) {
+    //     ctx.next();
+    // }
 
     const value = parseValue(ctx);
 
