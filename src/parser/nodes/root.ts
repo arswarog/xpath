@@ -19,8 +19,22 @@ export class RootNode extends AbstractNode {
     }
 
     public getTokens() {
-        return [this.startSpace, ...this.selector.getTokens(), this.endSpace].filter(
+        const tokens = [this.startSpace, ...this.selector.getTokens(), this.endSpace].filter(
             Boolean,
         ) as Token[];
+
+        // проверить что нет undefined в tokens
+        if (tokens.some((token) => token === undefined)) {
+            throw new Error('RootNode.getTokens: undefined in tokens');
+        }
+
+        // проверить что start и end идут по порядку
+        for (let i = 0; i < tokens.length - 1; i++) {
+            if (tokens[i].end > tokens[i + 1].start) {
+                throw new Error('RootNode.getTokens: tokens are not in order');
+            }
+        }
+
+        return tokens;
     }
 }
