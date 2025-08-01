@@ -3,8 +3,6 @@ import { Positionable } from '../common';
 export enum NodeType {
     Detached,
     Root,
-    Value,
-    BinaryExpression,
 }
 
 const INVALID_POSITION = -1;
