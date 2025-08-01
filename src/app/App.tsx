@@ -34,7 +34,7 @@ export function App() {
                 element={
                     <Navigate
                         replace
-                        to="/ast"
+                        to="/highlight"
                     />
                 }
             />
