@@ -109,4 +109,9 @@ export default tsEslint.config(
         },
     },
     prettierConfig,
+    {
+        rules: {
+            curly: ['error', 'all'],
+        },
+    },
 );

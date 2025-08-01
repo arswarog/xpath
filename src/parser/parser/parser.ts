@@ -55,7 +55,9 @@ function parseBinaryExpression(
         }
 
         const operatorPrecedence = getPrecedence(operator);
-        if (operatorPrecedence < precedence) break;
+        if (operatorPrecedence < precedence) {
+            break;
+        }
 
         ctx.next();
 
