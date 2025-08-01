@@ -35,13 +35,14 @@ export function createContext(tokens: Token[]): ParserContext {
 function createEofToken(tokens: Token[]): Token {
     const lastToken = tokens[tokens.length - 1];
 
-    if (!lastToken)
+    if (!lastToken) {
         return {
             start: 0,
             end: 0,
             text: '[EOF]',
             type: TokenType.EndOfFile,
         };
+    }
 
     return {
         type: TokenType.EndOfFile,

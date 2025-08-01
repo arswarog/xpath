@@ -1,0 +1,59 @@
+.SyntaxTheme {
+    --background: #282c34;
+    --foreground: #abb2bf;
+    --variable: #e06c75;
+    --keyword: #c678dd;
+    --number: #d19a66;
+    --constant: #e06c75;
+    --method: #61afef;
+    --string: #98c379;
+    --operator: #56b6c2;
+    --comment: #5c6370;
+    --error: #ff0000;
+
+    background: var(--background);
+    color: var(--foreground);
+    white-space: break-spaces;
+    padding: 6px 12px;
+    margin: 0;
+
+    &__regular {
+        color: var(--foreground);
+    }
+
+    &__variable {
+        color: var(--variable);
+    }
+
+    &__keyword {
+        color: var(--keyword);
+    }
+
+    &__number {
+        color: var(--number);
+    }
+
+    &__constant {
+        color: var(--constant);
+    }
+
+    &__method {
+        color: var(--method);
+    }
+
+    &__string {
+        color: var(--string);
+    }
+
+    &__operator {
+        color: var(--operator);
+    }
+
+    &__comment {
+        color: var(--comment);
+    }
+
+    &__error {
+        color: var(--error);
+    }
+}

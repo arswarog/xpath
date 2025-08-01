@@ -1,5 +1,5 @@
 import { createToken } from './create-token';
-import { tokenDeclarations } from './tokens';
+import { TokenDeclaration, tokenDeclarations } from './tokens';
 import { Token, TokenType } from './types';
 
 export function analyzeCode(code: string): Token[] {
@@ -11,29 +11,35 @@ export function analyzeCode(code: string): Token[] {
 
     let index = 0;
     let buffer = '';
-    let tokenType = TokenType.NumericLiteral;
+    let tokenType = TokenType.UnknownSymbol;
 
     do {
         const char = code[index];
-        const charType = getCharType(char);
+        const { type, single } = getCharType(char);
 
         if (!buffer.length) {
             buffer = char;
-            tokenType = charType;
+            tokenType = type;
             index++;
+
+            if (single) {
+                tokens.push(createToken(tokenType, char, index - 1));
+                buffer = '';
+                tokenType = TokenType.UnknownSymbol;
+            }
+
             continue;
         }
 
-        if (charType === tokenType) {
+        if (type === tokenType) {
             buffer += char;
             index++;
             continue;
         }
 
         tokens.push(createToken(tokenType, buffer, index - buffer.length));
-        buffer = char;
-        tokenType = charType;
-        index++;
+        buffer = '';
+        tokenType = TokenType.UnknownSymbol;
     } while (index < code.length);
 
     if (buffer.length) {
@@ -43,12 +49,15 @@ export function analyzeCode(code: string): Token[] {
     return tokens;
 }
 
-function getCharType(char: string): TokenType {
-    for (const { chars, type } of tokenDeclarations) {
-        if (chars.includes(char)) {
-            return type;
+function getCharType(char: string): TokenDeclaration {
+    for (const data of tokenDeclarations) {
+        if (data.chars.includes(char)) {
+            return data;
         }
     }
 
-    return TokenType.UnknownSymbol;
+    return {
+        type: TokenType.UnknownSymbol,
+        chars: '',
+    };
 }
