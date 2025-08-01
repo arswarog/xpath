@@ -10,7 +10,7 @@ const b = block(styles, 'DevLayout');
 export function DevLayout() {
     return (
         <div className={b()}>
-            <h1 className={b('title')}>Отладка</h1>
+            <h1 className={b('title')}>Парсер XPath</h1>
             <div className={b('display')}>
                 <XPathEditor />
             </div>
