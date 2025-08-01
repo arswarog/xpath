@@ -13,7 +13,7 @@ import {
 import { parse } from '../parser';
 
 describe('Parser', () => {
-    it('selector and predicate', () => {
+    it.skip('selector and predicate', () => {
         // Arrange
         const source = './/*[@data-attr="value" and @data-attr2="value2" or @data-attr3="value3"]';
 

@@ -155,7 +155,7 @@ function parseLogicalExpression(
 
         left = new LogicalExpressionNode(
             left,
-            spaceBeforeOperator,
+            spaceBeforeOperator!,
             operator,
             spaceAfterOperator,
             right,
