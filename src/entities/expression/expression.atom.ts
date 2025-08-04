@@ -4,7 +4,12 @@ import { ButtonCode } from '@src/entities/keyboard';
 
 import { storage } from './storage';
 
-export const expressionAtom = atom(storage.getItem('expression') ?? '0', 'expressionAtom');
+const defaultExpression = './/*';
+
+export const expressionAtom = atom(
+    storage.getItem('expression') ?? defaultExpression,
+    'expressionAtom',
+);
 
 export const changeExpressionAction = action((ctx, value: string) => {
     storage.setItem('expression', value);
@@ -17,16 +22,16 @@ export const pressKeyAction = action((ctx, key: string) => {
     if (key === ButtonCode.Backspace) {
         const newValue = expression.slice(0, -1);
 
-        return expressionAtom(ctx, newValue || '0');
+        return expressionAtom(ctx, newValue || defaultExpression);
     }
     if (key === ButtonCode.Enter) {
         return;
     }
     if (key === ButtonCode.Clear) {
-        return expressionAtom(ctx, '0');
+        return expressionAtom(ctx, defaultExpression);
     }
 
-    const newValue = expression === '0' ? key : expression + key;
+    const newValue = expression === defaultExpression ? key : expression + key;
 
     return expressionAtom(ctx, newValue);
 });
