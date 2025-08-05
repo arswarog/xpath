@@ -1,18 +1,19 @@
 import { useAction, useAtom } from '@reatom/npm-react';
 
-import { changeExpressionAction } from '@src/entities/expression';
-
-import { screenAtom } from './atom';
-import { XPathEditorComponent } from './component';
+import { changeExpressionAction, expressionAtom } from '@src/entities/expression';
+import { tokensAtom } from '@src/features/evaluate';
+import { XPathEditorComponent } from '@src/widgets/xpath-editor/component.tsx';
 
 export function XPathEditor() {
-    const [data] = useAtom(screenAtom);
+    const [code] = useAtom(expressionAtom);
+    const [tokens] = useAtom(tokensAtom);
 
     const handleChange = useAction(changeExpressionAction);
 
     return (
         <XPathEditorComponent
-            data={data}
+            code={code}
+            tokens={tokens}
             onChange={handleChange}
         />
     );

@@ -8,7 +8,7 @@ import styles from './SyntaxTheme.module.scss';
 
 const b = block(styles, 'SyntaxTheme');
 
-interface SyntaxThemeProps {
+export interface SyntaxThemeProps {
     fontSize?: string;
 }
 
@@ -42,14 +42,18 @@ export const SyntaxTheme = createCompositeComponent(SyntaxThemeComponent, 'Synta
 export type SyntaxThemeItem = FC<PropsWithChildren<HTMLAttributes<HTMLSpanElement>>>;
 
 function componentFactory(styleName: string): SyntaxThemeItem {
-    const Component: SyntaxThemeItem = ({ children, className, ...props }) => (
-        <span
-            {...props}
-            className={b(styleName) + (className ? ` ${className}` : '')}
-        >
-            {children}
-        </span>
-    );
+    const Component: SyntaxThemeItem = ({ children, className, ...props }) => {
+        console.log(`render span ${children}`);
+
+        return (
+            <span
+                {...props}
+                className={b(styleName) + (className ? ` ${className}` : '')}
+            >
+                {children}
+            </span>
+        );
+    };
 
     Component.displayName = `SyntaxTheme.${styleName}`;
 
