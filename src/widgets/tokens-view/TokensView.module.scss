@@ -1,0 +1,43 @@
+.TokensView {
+    display: flex;
+    flex-direction: column;
+
+    &__table {
+        text-align: left;
+        width: min-content;
+        border-spacing: 0px;
+    }
+
+    &__row {
+        transition: 0.5s;
+
+        &:hover {
+            background-color: #e5e5e5;
+        }
+
+        &_error {
+            background-color: #ffcccc;
+        }
+    }
+
+    &__type {
+        flex: 0 0 25%;
+    }
+
+    &__text {
+        flex: 0 0 25%;
+        padding: 0 2em;
+    }
+
+    &__text-content {
+        white-space: pre;
+        color: #535bf2;
+        font-weight: 500;
+    }
+
+    &__position {
+        flex: 0 0 25%;
+        white-space: nowrap;
+        padding-right: 1em;
+    }
+}

@@ -1,9 +1,15 @@
 import { atom } from '@reatom/framework';
 
 import { expressionAtom } from '@src/entities/expression';
-import { HighlightedError, parse, PositionalError } from '@src/parser';
+import { analyzeCode, HighlightedError, parse, PositionalError } from '@src/parser';
 
 export const astParsingErrorAtom = atom<HighlightedError | null>(null, 'astParsingErrorAtom');
+
+export const tokensAtom = atom((ctx) => {
+    const expression = ctx.spy(expressionAtom);
+
+    return analyzeCode(expression);
+}, 'tokensAtom');
 
 export const astAtom = atom((ctx) => {
     const expression = ctx.spy(expressionAtom);
