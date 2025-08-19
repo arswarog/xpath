@@ -2,20 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 
 import block from 'bem-css-modules';
 
+import { TokenizedCodeView } from '@src/features/tokenized-code-view';
 import { Token } from '@src/parser';
-import { SyntaxTheme } from '@src/shared/syntax-theme';
 
-import styles from './TokenizedCodeView.module.scss';
-import { tokensMap } from './tokens-map';
+import styles from './TokenizedCodeWidget.module.scss';
 
-interface TokenizedCodeViewProps {
+interface TokenizedCodeWidgetProps {
     tokens: Token[];
     originalCode?: string;
 }
 
-const b = block(styles, 'TokenizedCodeView');
+const b = block(styles, 'TokenizedCodeWidget');
 
-export function TokenizedCodeView({ tokens, originalCode }: TokenizedCodeViewProps) {
+export function TokenizedCodeWidget({ tokens, originalCode }: TokenizedCodeWidgetProps) {
     const [correctCode, setCorrectCode] = useState(false);
     const codeRef = useRef<HTMLPreElement>(null);
 
@@ -49,16 +48,11 @@ export function TokenizedCodeView({ tokens, originalCode }: TokenizedCodeViewPro
                     Copy
                 </button>
             </div>
-            <SyntaxTheme
+            <TokenizedCodeView
+                tokens={tokens}
                 fontSize="1.2rem"
                 ref={codeRef}
-            >
-                {tokens.map((token) => {
-                    const Component = tokensMap[token.type];
-
-                    return <Component>{token.text}</Component>;
-                })}
-            </SyntaxTheme>
+            />
         </div>
     );
 }
