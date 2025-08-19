@@ -1,0 +1,48 @@
+import { useLayoutEffect, useRef } from 'react';
+
+import block from 'bem-css-modules';
+
+import { TokenizedCodeView } from '@src/features/tokenized-code-view';
+import { Token } from '@src/parser';
+
+import styles from './component.module.scss';
+
+const b = block(styles, 'XPathEditor');
+
+export interface IScreenProps {
+    code: string;
+    tokens: Token[];
+    onChange?: (code: string) => void;
+}
+
+export function XPathEditorComponent({ code, tokens, onChange }: IScreenProps) {
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const tokensRef = useRef<HTMLPreElement>(null);
+
+    useLayoutEffect(() => {
+        if (!textAreaRef.current || !tokensRef.current) {
+            return;
+        }
+
+        textAreaRef.current!.style.height = `${tokensRef.current!.scrollHeight}px`;
+    });
+
+    return (
+        <div className={b()}>
+            <div className={b('tokens')}>
+                <TokenizedCodeView
+                    tokens={tokens}
+                    ref={tokensRef}
+                />
+            </div>
+            <textarea
+                className={b('textarea')}
+                ref={textAreaRef}
+                value={code}
+                onChange={(e) => onChange?.(e.target.value)}
+                autoFocus
+                rows={15}
+            />
+        </div>
+    );
+}

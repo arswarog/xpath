@@ -1,0 +1,48 @@
+.XPathEditor {
+    display: grid;
+    background-color: #252525;
+    margin: 0;
+    padding: 0;
+
+    &__textarea,
+    &__tokens {
+        grid-area: 1 / 1 / 2 / 2;
+
+        &,
+        & > pre {
+            margin: 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            white-space: break-spaces;
+            border: none;
+        }
+    }
+
+    &__textarea {
+        padding: 6px 12px;
+        overflow-y: hidden;
+        background-color: transparent;
+        color: transparent;
+        caret-color: white;
+    }
+
+    &__tokens {
+        pointer-events: none;
+
+        margin: 0;
+        padding: 0;
+        display: block;
+
+        width: 100%;
+        min-height: 4em;
+        font-size: 1.2rem;
+
+        color: #d3d3d3;
+        text-align: start;
+        border: none;
+        outline: none;
+        box-sizing: border-box;
+        transition: 0.3s;
+    }
+}
