@@ -1,8 +1,11 @@
+import { PositionalError } from '../common';
 import { Token, TokenType } from '../lexer';
 
 export interface ParserContext {
     index: number;
     getCurrentToken(): Token;
+    getCurrentTokenIfTypeAndNext(type: TokenType): Token | undefined;
+    getCurrentTokenOrDie(type: TokenType, errorMessage: string): Token;
     next(): void;
     isEnd(): boolean;
     getText(): string;
@@ -13,16 +16,46 @@ export function createContext(tokens: Token[]): ParserContext {
 
     const eofToken = createEofToken(tokens);
 
+    function next() {
+        index++;
+    }
+
+    function getCurrentToken() {
+        return tokens[index] || eofToken;
+    }
+
     return {
         get index() {
             return index;
         },
-        getCurrentToken() {
-            return tokens[index] || eofToken;
+        getCurrentToken,
+        getCurrentTokenIfTypeAndNext(type: TokenType): Token | undefined {
+            const token = getCurrentToken();
+
+            if (token.type !== type) {
+                return undefined;
+            }
+
+            next();
+
+            return token;
         },
-        next() {
-            index++;
+        getCurrentTokenOrDie(type: TokenType, errorMessage: string) {
+            const token = getCurrentToken();
+
+            if (token.type === type) {
+                return token;
+            }
+
+            throw new PositionalError(
+                `${errorMessage}\nExpected token ${TokenType[type]}, got ${TokenType[token.type]}`,
+                {
+                    start: token.start,
+                    end: token.end,
+                },
+            );
         },
+        next,
         isEnd(): boolean {
             return index >= tokens.length;
         },

@@ -1,7 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router';
 
 import { AstViewPage } from '@src/pages/ast-view';
+import { CodePage } from '@src/pages/code';
 import { DevLayout } from '@src/pages/dev-layout';
+import { HighlightPage } from '@src/pages/highlight';
 import { TokensViewPage } from '@src/pages/tokens-view';
 
 import './App.css';
@@ -10,6 +12,14 @@ export function App() {
     return (
         <Routes>
             <Route element={<DevLayout />}>
+                <Route
+                    path="highlight"
+                    element={<HighlightPage />}
+                />
+                <Route
+                    path="code"
+                    element={<CodePage />}
+                />
                 <Route
                     path="ast"
                     element={<AstViewPage />}
@@ -24,7 +34,7 @@ export function App() {
                 element={
                     <Navigate
                         replace
-                        to="/ast"
+                        to="/highlight"
                     />
                 }
             />

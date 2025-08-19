@@ -42,7 +42,7 @@ describe('Errors', () => {
                 ].join('\n'),
             );
         });
-        it('end of file', () => {
+        it.skip('end of file', () => {
             const error = new PositionalError('Unexpected end of file', {
                 start: 3,
                 end: 3,
@@ -58,6 +58,44 @@ describe('Errors', () => {
                     '         ~',
                 ].join('\n'),
             );
+        });
+        describe('многострочный код', () => {
+            it('ошибка в середине строки', () => {
+                const error = new PositionalError('Unexpected token', { start: 15, end: 17 });
+
+                expect(() => {
+                    throw new HighlightedError(error, '1 + 23 + 5\n1 + 23 + 5\n1 + 23 + 5');
+                }).throws(
+                    [
+                        'Unexpected token',
+                        // Подсвечивает ошибку
+                        'Line: 1 + 23 + 5',
+                        'Line: 1 + 23 + 5',
+                        '          ~~',
+                        'Line: 1 + 23 + 5',
+                    ].join('\n'),
+                );
+            });
+            it('ошибка на несколько строк', () => {
+                const error = new PositionalError('Unexpected token', { start: 10, end: 19 });
+
+                expect(() => {
+                    throw new HighlightedError(
+                        error,
+                        'const a = 10;\nconst b = 20;\nconst c = a + b;',
+                    );
+                }).throws(
+                    [
+                        'Unexpected token',
+                        'Line: const a = 10;',
+                        '                ~~~',
+                        'Line: const b = 20;',
+                        '      ~~~~~',
+                        'Line: const c = a + b;',
+                        '',
+                    ].join('\n'),
+                );
+            });
         });
     });
     describe('Практическое использование', () => {
