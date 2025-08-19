@@ -1,0 +1,27 @@
+.DevLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    min-height: 100%;
+    max-width: none;
+    padding-top: 0;
+
+    &__title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    &__display {
+        overflow: hidden;
+        box-shadow: 0 20px 47px 18px #505d6640;
+        border-radius: 10px;
+        position: sticky;
+        top: 20px;
+    }
+
+    &__page {
+        display: block;
+    }
+}
