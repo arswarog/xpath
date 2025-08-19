@@ -1,16 +1,19 @@
 import { Navigate, Route, Routes } from 'react-router';
 
 import { AstViewPage } from '@src/pages/ast-view';
+import { DevLayout } from '@src/pages/dev-layout';
 
 import './App.css';
 
 export function App() {
     return (
         <Routes>
-            <Route
-                path="ast"
-                element={<AstViewPage />}
-            />
+            <Route element={<DevLayout />}>
+                <Route
+                    path="ast"
+                    element={<AstViewPage />}
+                />
+            </Route>
             <Route
                 path="*"
                 element={
