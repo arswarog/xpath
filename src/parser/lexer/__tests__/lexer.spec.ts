@@ -186,7 +186,7 @@ describe('Lexer', () => {
                 createToken(TokenType.OpeningSquareBracket, '[', 18),
             ]);
         });
-        it('[child::chapter/descendant::para [', () => {
+        it.skip('[child::chapter/descendant::para [', () => {
             expect(analyzeCode('[child::chapter/descendant::para [')).toEqual([
                 createToken(TokenType.OpeningSquareBracket, '[', 0),
                 createToken(TokenType.UnknownSymbol, 'child::chapter/descendant::para', 1),

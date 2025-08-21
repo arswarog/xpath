@@ -1,3 +1,5 @@
+import { PositionalError } from '@src/parser';
+
 import { createToken } from './create-token';
 import { TokenDeclaration, tokenDeclarations } from './tokens';
 import { Token, TokenType } from './types';
@@ -74,8 +76,6 @@ export function analyzeCode(code: string): Token[] {
             return check(buffer);
         });
 
-        console.log({ char, buffer, possibleTokens, actualTokens });
-
         if (actualTokens.length === 0) {
             insertUnknownSymbol(tokens, buffer, index);
             reset();
@@ -89,7 +89,7 @@ export function analyzeCode(code: string): Token[] {
             });
         }
 
-        const completeTokens = actualTokens.filter(({ finalCheck }) => {
+        let completeTokens = actualTokens.filter(({ finalCheck }) => {
             if (!finalCheck) {
                 return true;
             }
@@ -106,13 +106,17 @@ export function analyzeCode(code: string): Token[] {
         }
 
         if (completeTokens.length > 1) {
+            completeTokens = completeTokens.filter(({ constString }) => constString);
+        }
+
+        if (completeTokens.length > 1) {
             throw new PositionalError('Multiple tokens found', {
                 start: index - buffer.length,
                 end: index,
             });
         }
 
-        const { type } = actualTokens[0];
+        const { type } = completeTokens[0];
 
         tokens.push(createToken(type, buffer, index - buffer.length));
 
