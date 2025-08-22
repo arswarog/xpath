@@ -2,44 +2,112 @@ import { TokenType } from './types';
 
 export interface TokenDeclaration {
     type: TokenType;
-    chars: string;
+    // все символы, которые могут быть в токене
+    chars: string | RegExp;
+    // проверка частичного совпадения строки
+    check?: RegExp | ((text: string) => boolean);
+    // токен представляет конкретное слово
+    constString?: boolean;
+    // финальная проверка
+    finalCheck?: (text: string) => boolean;
+    // каждый символ этого типа - отдельный токен
+    single?: boolean;
 }
 
 export const tokenDeclarations: TokenDeclaration[] = [
     {
         type: TokenType.Space,
-        chars: ' ',
+        chars: ' \n\t',
     },
     {
-        type: TokenType.NumericLiteral,
-        chars: '0123456789',
+        type: TokenType.Comma,
+        chars: ',',
+        single: true,
     },
     {
-        type: TokenType.PlusOperation,
-        chars: '+',
+        type: TokenType.OpeningSquareBracket,
+        chars: '[',
+        single: true,
     },
     {
-        type: TokenType.MinusOperation,
-        chars: '-',
+        type: TokenType.ClosingSquareBracket,
+        chars: ']',
+        single: true,
     },
     {
-        type: TokenType.MultiplyOperation,
-        chars: '*×',
+        type: TokenType.OpeningRoundBracket,
+        chars: '(',
+        single: true,
     },
     {
-        type: TokenType.DivideOperation,
-        chars: '/÷',
+        type: TokenType.ClosingRoundBracket,
+        chars: ')',
+        single: true,
     },
     {
-        type: TokenType.HourLiteral,
-        chars: 'hHчЧ',
+        type: TokenType.Equal,
+        chars: '=',
+        single: true,
     },
     {
-        type: TokenType.MinuteLiteral,
-        chars: 'mMмМ',
+        type: TokenType.Asterisk,
+        chars: '*',
+        single: true,
     },
     {
-        type: TokenType.SecondLiteral,
-        chars: 'sSсС',
+        type: TokenType.Attribute,
+        chars: /^[@\w-]$/,
+        check: /^@\w?[\w-]*$/,
+        finalCheck: (str) => /^@\w[\w-]*$/.test(str),
+    },
+    {
+        type: TokenType.StringLiteral,
+        chars: /./,
+        check: /^'[^']*'?$/m,
+        finalCheck: (str) => /^'[^']*'$/m.test(str),
+    },
+    {
+        type: TokenType.StringLiteral,
+        chars: /./,
+        check: /^"[^"]*"?$/m,
+        finalCheck: (str) => /^"[^"]*"$/m.test(str),
+    },
+    {
+        type: TokenType.And,
+        chars: 'and',
+        constString: true,
+        check: /^an?d?$/,
+        finalCheck: (str) => str === 'and',
+    },
+    {
+        type: TokenType.Or,
+        chars: 'or',
+        constString: true,
+        check: /^or?$/,
+        finalCheck: (str) => str === 'or',
+    },
+    {
+        type: TokenType.SelectNode,
+        chars: /[.*/]/,
+        check: /^\.\.?\/?\/?\*?$/,
+        finalCheck: (str) => ['.', '..', './/*', '..//*'].includes(str),
+    },
+    {
+        type: TokenType.SelectNode,
+        chars: /[.\w-/:*]/,
+        check: /^\.\.?\/?[\w-]*:?:?\*?$/,
+        finalCheck: (str) => /^\.\.?\/[\w-]+::\*$/.test(str),
+    },
+    {
+        type: TokenType.SelectNode,
+        chars: /[\w-:*]/,
+        check: /^[\w-]*:?:?\*?$/,
+        finalCheck: (str) => /^[\w-]+::\*$/.test(str),
+    },
+    {
+        type: TokenType.Method,
+        chars: /[\w-]/,
+        check: /^[\w-]*$/,
+        finalCheck: (str) => /^[\w-]+$/.test(str),
     },
 ];
