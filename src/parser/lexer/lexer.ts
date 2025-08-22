@@ -79,11 +79,7 @@ export function analyzeCode(code: string): Token[] {
         if (actualTokens.length === 0) {
             insertUnknownSymbol(tokens, buffer, index);
             reset();
-            throw new Error('No possible tokens found');
-        }
-
-        if (actualTokens.length === 0) {
-            throw new PositionalError('No possible tokens found twice', {
+            throw new PositionalError('No possible tokens found', {
                 start: index - buffer.length,
                 end: index,
             });
