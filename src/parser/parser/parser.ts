@@ -3,6 +3,7 @@ import { analyzeCode, Token, TokenType } from '../lexer';
 import { RootNode } from '../nodes';
 
 import { createContext } from './context';
+import { checkTokensOrder, checkUndefinedTokens } from './utils';
 
 export function parse(source: string): RootNode {
     try {
@@ -30,6 +31,11 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
             ctx.getCurrentToken(),
         );
     }
+
+    const codeTokens = root.getTokens();
+
+    checkUndefinedTokens(codeTokens);
+    checkTokensOrder(codeTokens);
 
     return root;
 }
