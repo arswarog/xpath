@@ -15,6 +15,7 @@ export const TokenizedCodeView = forwardRef<HTMLPreElement, TokenizedCodeViewPro
         return (
             <SyntaxTheme
                 fontSize={fontSize}
+                padding="6px 12px"
                 ref={ref}
             >
                 {tokens.map((token, index) => {
