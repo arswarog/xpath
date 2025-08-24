@@ -10,15 +10,16 @@ const b = block(styles, 'SyntaxTheme');
 
 export interface SyntaxThemeProps {
     fontSize?: string;
+    padding?: string;
 }
 
 const SyntaxThemeComponent = forwardRef<HTMLPreElement, PropsWithChildren<SyntaxThemeProps>>(
-    ({ children, fontSize }, ref) => {
+    ({ children, fontSize, padding }, ref) => {
         return (
             <pre
                 ref={ref}
                 className={b()}
-                style={{ fontSize }}
+                style={{ fontSize, padding }}
             >
                 {children}
             </pre>
