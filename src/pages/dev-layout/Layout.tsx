@@ -7,9 +7,9 @@ import { XPathEditor } from '@src/widgets/xpath-editor';
 import styles from './Layout.module.scss';
 const b = block(styles, 'DevLayout');
 
-export function DevLayout() {
+export function DevLayout({ stickyEditor }: { stickyEditor?: boolean }) {
     return (
-        <div className={b()}>
+        <div className={b({ stickyEditor })}>
             <h1 className={b('title')}>Парсер XPath</h1>
             <div className={b('display')}>
                 <XPathEditor />
