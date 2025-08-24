@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import { Token } from '@src/parser';
 import { SyntaxTheme } from '@src/shared/syntax-theme';
 
-import { tokensMap } from './tokens-map';
+import { viewToken } from './view-token.tsx';
 
 interface TokenizedCodeViewProps {
     tokens: Token[];
@@ -18,11 +18,7 @@ export const TokenizedCodeView = forwardRef<HTMLPreElement, TokenizedCodeViewPro
                 padding="6px 12px"
                 ref={ref}
             >
-                {tokens.map((token, index) => {
-                    const Component = tokensMap[token.type];
-
-                    return <Component key={index}>{token.text}</Component>;
-                })}
+                {tokens.map(viewToken)}
             </SyntaxTheme>
         );
     },

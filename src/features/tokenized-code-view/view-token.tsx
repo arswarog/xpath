@@ -1,7 +1,9 @@
-import { TokenType } from '@src/parser';
+import { ReactNode } from 'react';
+
+import { Token, TokenType } from '@src/parser';
 import { SyntaxTheme, SyntaxThemeItem } from '@src/shared/syntax-theme';
 
-export const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
+const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
     [TokenType.UnknownSymbol]: SyntaxTheme.Error,
     [TokenType.EndOfFile]: SyntaxTheme.Regular,
     [TokenType.Space]: SyntaxTheme.Regular,
@@ -19,3 +21,9 @@ export const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
     [TokenType.SelectNode]: SyntaxTheme.Keyword,
     [TokenType.Method]: SyntaxTheme.Method,
 };
+
+export function viewToken(token: Token, key: number | string): ReactNode {
+    const Component = tokensMap[token.type];
+
+    return <Component key={key}>{token.text}</Component>;
+}
