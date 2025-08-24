@@ -44,12 +44,12 @@ export type SyntaxThemeItem = FC<PropsWithChildren<HTMLAttributes<HTMLSpanElemen
 function componentFactory(styleName: string): SyntaxThemeItem {
     const Component: SyntaxThemeItem = ({ children, className, ...props }) => {
         return (
-            <span
+            <code
                 {...props}
                 className={b(styleName) + (className ? ` ${className}` : '')}
             >
                 {children}
-            </span>
+            </code>
         );
     };
 
