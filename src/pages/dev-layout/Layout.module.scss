@@ -7,6 +7,12 @@
     max-width: none;
     padding-top: 0;
 
+    &_stickyEditor {
+        .DevLayout__display {
+            position: sticky;
+        }
+    }
+
     &__title {
         text-align: center;
         font-size: 2rem;
@@ -17,7 +23,6 @@
         overflow: hidden;
         box-shadow: 0 20px 47px 18px #505d6640;
         border-radius: 10px;
-        position: sticky;
         top: 20px;
     }
 
