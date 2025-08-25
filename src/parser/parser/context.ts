@@ -6,9 +6,12 @@ export interface ParserContext {
     getCurrentToken(): Token;
     getCurrentTokenIfTypeAndNext(type: TokenType): Token | undefined;
     getCurrentTokenOrDie(type: TokenType, errorMessage: string): Token;
-    next(): void;
+    next(steps?: number): void;
     isEnd(): boolean;
     getText(): string;
+    getNext(delta?: number): Token;
+    getNextOrDie(type: TokenType, errorMessage: string, delta?: number): Token;
+    checkNext(type: TokenType, delta?: number): boolean;
 }
 
 export function createContext(tokens: Token[]): ParserContext {
@@ -16,12 +19,32 @@ export function createContext(tokens: Token[]): ParserContext {
 
     const eofToken = createEofToken(tokens);
 
-    function next() {
-        index++;
+    function next(steps = 1) {
+        index += steps;
     }
 
     function getCurrentToken() {
         return tokens[index] || eofToken;
+    }
+
+    function getNext(delta = 1): Token {
+        return tokens[index + delta] || eofToken;
+    }
+
+    function getNextOrDie(type: TokenType, errorMessage: string, delta = 1) {
+        const token = getNext(delta);
+
+        if (token.type === type) {
+            return token;
+        }
+
+        throw new PositionalError(
+            `${errorMessage}\nExpected token ${TokenType[type]}, got ${TokenType[token.type]}`,
+            {
+                start: token.start,
+                end: token.end,
+            },
+        );
     }
 
     return {
@@ -41,19 +64,7 @@ export function createContext(tokens: Token[]): ParserContext {
             return token;
         },
         getCurrentTokenOrDie(type: TokenType, errorMessage: string) {
-            const token = getCurrentToken();
-
-            if (token.type === type) {
-                return token;
-            }
-
-            throw new PositionalError(
-                `${errorMessage}\nExpected token ${TokenType[type]}, got ${TokenType[token.type]}`,
-                {
-                    start: token.start,
-                    end: token.end,
-                },
-            );
+            return getNextOrDie(type, errorMessage, 0);
         },
         next,
         isEnd(): boolean {
@@ -61,6 +72,11 @@ export function createContext(tokens: Token[]): ParserContext {
         },
         getText() {
             return tokens.map((t) => t.text).join('');
+        },
+        getNext,
+        getNextOrDie,
+        checkNext(type: TokenType, delta = 1): boolean {
+            return getNext(delta).type === type;
         },
     };
 }
