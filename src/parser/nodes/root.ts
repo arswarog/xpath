@@ -12,4 +12,8 @@ export class RootNode extends AbstractNode {
         this.start = expression.start;
         this.end = expression.end;
     }
+
+    public getTokens() {
+        return this.expression.getTokens();
+    }
 }

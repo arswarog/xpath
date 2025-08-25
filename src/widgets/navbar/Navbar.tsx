@@ -10,6 +10,9 @@ export function Navbar() {
         <nav className={b()}>
             <ul className={b('list')}>
                 <li className={b('item')}>
+                    <NavLink to="/code">#code</NavLink>
+                </li>
+                <li className={b('item')}>
                     <NavLink to="/tokens">#tokens</NavLink>
                 </li>
                 <li className={b('item')}>
