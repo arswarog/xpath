@@ -1,10 +1,12 @@
 import { useAtom } from '@reatom/npm-react';
 
+import { expressionAtom } from '@src/entities/expression';
 import { astAtom, astParsingErrorAtom } from '@src/features/evaluate';
-import { TokenizedCodeView } from '@src/features/tokenized-code-view';
 import { ErrorView } from '@src/widgets/error-view';
+import { TokenizedCodeWidget } from '@src/widgets/tokenized-code-widget';
 
 export function CodePage() {
+    const [expression] = useAtom(expressionAtom);
     const [ast] = useAtom(astAtom);
     const [error] = useAtom(astParsingErrorAtom);
 
@@ -13,9 +15,9 @@ export function CodePage() {
     return (
         <>
             {error && <ErrorView error={error} />}
-            <TokenizedCodeView
+            <TokenizedCodeWidget
                 tokens={tokens}
-                fontSize="1.2rem"
+                originalCode={expression}
             />
         </>
     );
