@@ -36,18 +36,7 @@ function highlightError(viewToken: ViewTokenFn, error: PositionalError | undefin
         const view = viewToken(token, key);
 
         if (token.start >= start && token.end <= end) {
-            return (
-                <span
-                    style={{
-                        textDecorationLine: 'underline',
-                        textDecorationStyle: 'wavy',
-                        textDecorationColor: 'red',
-                        backgroundColor: 'rgb(255 0 0 / 50%)',
-                    }}
-                >
-                    {view}
-                </span>
-            );
+            return <SyntaxTheme.HighlightedError>{view}</SyntaxTheme.HighlightedError>;
         }
 
         return view;

@@ -56,4 +56,11 @@
     &__error {
         color: var(--error);
     }
+
+    &__highlightedError {
+        text-decoration-line: underline;
+        text-decoration-style: wavy;
+        text-decoration-color: var(--error);
+        background-color: rgb(255 0 0 / 50%);
+    }
 }
