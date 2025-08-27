@@ -3,7 +3,7 @@ import { useLayoutEffect, useRef } from 'react';
 import block from 'bem-css-modules';
 
 import { TokenizedCodeView } from '@src/features/tokenized-code-view';
-import { Token } from '@src/parser';
+import { PositionalError, Token } from '@src/parser';
 
 import styles from './component.module.scss';
 
@@ -12,10 +12,11 @@ const b = block(styles, 'XPathEditor');
 export interface IScreenProps {
     code: string;
     tokens: Token[];
+    error?: PositionalError;
     onChange?: (code: string) => void;
 }
 
-export function XPathEditorComponent({ code, tokens, onChange }: IScreenProps) {
+export function XPathEditorComponent({ code, tokens, error, onChange }: IScreenProps) {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const tokensRef = useRef<HTMLPreElement>(null);
 
@@ -32,6 +33,7 @@ export function XPathEditorComponent({ code, tokens, onChange }: IScreenProps) {
             <div className={b('tokens')}>
                 <TokenizedCodeView
                     tokens={tokens}
+                    error={error}
                     ref={tokensRef}
                 />
             </div>

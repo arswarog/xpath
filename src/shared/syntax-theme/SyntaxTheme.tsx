@@ -38,6 +38,7 @@ export const SyntaxTheme = createCompositeComponent(SyntaxThemeComponent, 'Synta
     Operator: componentFactory('operator'),
     Comment: componentFactory('comment'),
     Error: componentFactory('error'),
+    HighlightedError: componentFactory('highlightedError'),
 });
 
 export type SyntaxThemeItem = FC<PropsWithChildren<HTMLAttributes<HTMLSpanElement>>>;

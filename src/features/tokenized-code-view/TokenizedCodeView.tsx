@@ -1,25 +1,44 @@
 import { forwardRef } from 'react';
 
-import { Token } from '@src/parser';
+import { PositionalError, Token } from '@src/parser';
 import { SyntaxTheme } from '@src/shared/syntax-theme';
 
-import { viewToken } from './view-token.tsx';
+import { viewToken, ViewTokenFn } from './view-token';
 
 interface TokenizedCodeViewProps {
     tokens: Token[];
+    error?: PositionalError;
     fontSize?: string;
 }
 
 export const TokenizedCodeView = forwardRef<HTMLPreElement, TokenizedCodeViewProps>(
-    ({ tokens, fontSize }, ref) => {
+    ({ tokens, error, fontSize }, ref) => {
         return (
             <SyntaxTheme
                 fontSize={fontSize}
                 padding="6px 12px"
                 ref={ref}
             >
-                {tokens.map(viewToken)}
+                {tokens.map(highlightError(viewToken, error))}
             </SyntaxTheme>
         );
     },
 );
+
+function highlightError(viewToken: ViewTokenFn, error: PositionalError | undefined): ViewTokenFn {
+    if (!error) {
+        return viewToken;
+    }
+
+    const { start, end } = error.position;
+
+    return (token, key) => {
+        const view = viewToken(token, key);
+
+        if (token.start < end && token.end > start) {
+            return <SyntaxTheme.HighlightedError>{view}</SyntaxTheme.HighlightedError>;
+        }
+
+        return view;
+    };
+}

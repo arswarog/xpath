@@ -1,12 +1,13 @@
 import { useAction, useAtom } from '@reatom/npm-react';
 
 import { changeExpressionAction, expressionAtom } from '@src/entities/expression';
-import { tokensAtom } from '@src/features/evaluate';
+import { astParsingErrorAtom, tokensAtom } from '@src/features/evaluate';
 
 import { XPathEditorComponent } from './component.tsx';
 
 export function XPathEditor() {
     const [code] = useAtom(expressionAtom);
+    const [error] = useAtom(astParsingErrorAtom);
     const [tokens] = useAtom(tokensAtom);
 
     const handleChange = useAction(changeExpressionAction);
@@ -15,6 +16,7 @@ export function XPathEditor() {
         <XPathEditorComponent
             code={code}
             tokens={tokens}
+            error={error?.error}
             onChange={handleChange}
         />
     );
