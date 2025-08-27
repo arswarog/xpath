@@ -1,12 +1,13 @@
 import { forwardRef } from 'react';
 
-import { Token } from '@src/parser';
+import { PositionalError, Token } from '@src/parser';
 import { SyntaxTheme } from '@src/shared/syntax-theme';
 
 import { viewToken } from './view-token.tsx';
 
 interface TokenizedCodeViewProps {
     tokens: Token[];
+    error?: PositionalError;
     fontSize?: string;
 }
 
