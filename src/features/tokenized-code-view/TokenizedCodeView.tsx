@@ -35,7 +35,7 @@ function highlightError(viewToken: ViewTokenFn, error: PositionalError | undefin
     return (token, key) => {
         const view = viewToken(token, key);
 
-        if (token.start >= start && token.end <= end) {
+        if (token.start < end && token.end > start) {
             return <SyntaxTheme.HighlightedError>{view}</SyntaxTheme.HighlightedError>;
         }
 
