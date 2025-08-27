@@ -18,7 +18,7 @@ export const TokenizedCodeView = forwardRef<HTMLPreElement, TokenizedCodeViewPro
                 padding="6px 12px"
                 ref={ref}
             >
-                {tokens.map(viewToken)}
+                {tokens.map(viewToken)}&nbsp;
             </SyntaxTheme>
         );
     },

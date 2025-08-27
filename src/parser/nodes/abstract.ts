@@ -4,10 +4,13 @@ import { Token } from '../lexer';
 export enum NodeType {
     Detached,
     Root,
+    Selector,
+    Predicate,
     Attribute,
     Value,
     CheckAttribute,
     LogicalExpression,
+    BracketedExpression,
 }
 
 const INVALID_POSITION = -1;

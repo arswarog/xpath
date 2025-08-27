@@ -2,9 +2,12 @@ import { HighlightedError, PositionalError } from '../common';
 import { analyzeCode, Token, TokenType } from '../lexer';
 import {
     AttributeNode,
+    BracketedExpressionNode,
     CheckAttributeNode,
     LogicalExpressionNode,
+    PredicateNode,
     RootNode,
+    SelectorNode,
     ValueNode,
 } from '../nodes';
 
@@ -29,13 +32,17 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(parseLogicalExpression(ctx), source);
+    const startSpace = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+    const selector = parseSelector(ctx);
+    const endSpace = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const root = new RootNode(startSpace, selector, endSpace, source);
 
     if (!ctx.isEnd()) {
-        throw new PositionalError(
-            `Unexpected token "${ctx.getCurrentToken().text}" (${TokenType[ctx.getCurrentToken().type]})`,
-            ctx.getCurrentToken(),
-        );
+        //     throw new PositionalError(
+        //         `Unexpected token "${ctx.getCurrentToken().text}" (${TokenType[ctx.getCurrentToken().type]})`,
+        //         ctx.getCurrentToken(),
+        //     );
     }
 
     const codeTokens = root.getTokens();
@@ -44,6 +51,77 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     checkTokensOrder(codeTokens);
 
     return root;
+}
+
+function parseSelector(ctx: ParserContext): SelectorNode {
+    const selectNode = parseSelectNode(ctx);
+
+    const spaceBeforePredicate = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+    const predicate = parsePredicate(ctx);
+
+    return new SelectorNode(selectNode, [[spaceBeforePredicate, predicate]]);
+}
+
+function parseSelectNode(ctx: ParserContext): Token {
+    const token = ctx.getCurrentTokenOrDie(TokenType.SelectNode, 'Failed to parse node');
+    ctx.next();
+    return token;
+}
+
+function parsePredicate(ctx: ParserContext): PredicateNode {
+    const open = ctx.getCurrentTokenOrDie(
+        TokenType.OpeningSquareBracket,
+        'Failed to parse predicate',
+    );
+    ctx.next();
+
+    const spaceAfterOpen = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const expression = parseBracketedExpression(ctx);
+
+    const spaceBeforeClose = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const close = ctx.getCurrentTokenOrDie(
+        TokenType.ClosingSquareBracket,
+        'Failed to parse predicate',
+    );
+    ctx.next();
+
+    return new PredicateNode(open, spaceAfterOpen, expression, spaceBeforeClose, close);
+}
+
+export function parseBracketedExpression(
+    ctx: ParserContext,
+): BracketedExpressionNode | CheckAttributeNode | LogicalExpressionNode {
+    if (ctx.getCurrentToken().type !== TokenType.OpeningRoundBracket) {
+        return parseLogicalExpression(ctx);
+    }
+
+    const openingBracket = ctx.getCurrentTokenOrDie(
+        TokenType.OpeningRoundBracket,
+        'Failed to parse bracketed expression',
+    );
+    ctx.next();
+
+    const spaceBeforeExpression = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const expression = parseBracketedExpression(ctx);
+
+    const spaceAfterExpression = ctx.getCurrentTokenIfTypeAndNext(TokenType.Space);
+
+    const closingBracket = ctx.getCurrentTokenOrDie(
+        TokenType.ClosingRoundBracket,
+        'Failed to parse bracketed expression',
+    );
+    ctx.next();
+
+    return new BracketedExpressionNode(
+        openingBracket,
+        spaceBeforeExpression,
+        expression,
+        spaceAfterExpression,
+        closingBracket,
+    );
 }
 
 export function parseLogicalExpression(
@@ -82,7 +160,7 @@ export function parseLogicalExpression(
 
         left = new LogicalExpressionNode(
             left,
-            spaceBeforeOperator,
+            spaceBeforeOperator!,
             operator,
             spaceAfterOperator,
             right,
