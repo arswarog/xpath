@@ -1,3 +1,5 @@
+import { Token } from '../lexer';
+
 import { AbstractNode, NodeType } from './abstract';
 
 export class RootNode extends AbstractNode {
@@ -11,5 +13,9 @@ export class RootNode extends AbstractNode {
 
         this.start = expression.start;
         this.end = expression.end;
+    }
+
+    public getTokens(): Token[] {
+        return this.expression.getTokens();
     }
 }
