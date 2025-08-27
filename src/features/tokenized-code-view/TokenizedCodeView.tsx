@@ -29,7 +29,30 @@ function highlightError(
     viewToken: (token: Token, key: number | string) => ReactNode,
     error: PositionalError | undefined,
 ): (token: Token, key: number | string) => ReactNode {
+    if (!error) {
+        return viewToken;
+    }
+
+    const { start, end } = error.position;
+
     return (token, key) => {
-        return viewToken(token, key);
+        const view = viewToken(token, key);
+
+        if (token.start >= start && token.end <= end) {
+            return (
+                <span
+                    style={{
+                        textDecorationLine: 'underline',
+                        textDecorationStyle: 'wavy',
+                        textDecorationColor: 'red',
+                        backgroundColor: 'rgb(255 0 0 / 50%)',
+                    }}
+                >
+                    {view}
+                </span>
+            );
+        }
+
+        return view;
     };
 }
