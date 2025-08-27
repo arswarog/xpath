@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, ReactNode } from 'react';
 
 import { PositionalError, Token } from '@src/parser';
 import { SyntaxTheme } from '@src/shared/syntax-theme';
@@ -12,15 +12,24 @@ interface TokenizedCodeViewProps {
 }
 
 export const TokenizedCodeView = forwardRef<HTMLPreElement, TokenizedCodeViewProps>(
-    ({ tokens, fontSize }, ref) => {
+    ({ tokens, error, fontSize }, ref) => {
         return (
             <SyntaxTheme
                 fontSize={fontSize}
                 padding="6px 12px"
                 ref={ref}
             >
-                {tokens.map(viewToken)}
+                {tokens.map(highlightError(viewToken, error))}
             </SyntaxTheme>
         );
     },
 );
+
+function highlightError(
+    viewToken: (token: Token, key: number | string) => ReactNode,
+    error: PositionalError | undefined,
+): (token: Token, key: number | string) => ReactNode {
+    return (token, key) => {
+        return viewToken(token, key);
+    };
+}
