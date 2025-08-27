@@ -22,8 +22,10 @@ const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
     [TokenType.Method]: SyntaxTheme.Method,
 };
 
-export function viewToken(token: Token, key: number | string): ReactNode {
+export type ViewTokenFn = (token: Token, key: number | string) => ReactNode;
+
+export const viewToken: ViewTokenFn = (token, key) => {
     const Component = tokensMap[token.type];
 
     return <Component key={key}>{token.text}</Component>;
-}
+};

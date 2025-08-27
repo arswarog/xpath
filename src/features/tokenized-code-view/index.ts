@@ -1,2 +1,2 @@
 export { TokenizedCodeView } from './TokenizedCodeView';
-export { viewToken } from './view-token';
+export { viewToken, type ViewTokenFn } from './view-token';

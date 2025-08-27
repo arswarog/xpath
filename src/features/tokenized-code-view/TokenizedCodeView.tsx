@@ -1,9 +1,9 @@
-import { forwardRef, ReactNode } from 'react';
+import { forwardRef } from 'react';
 
 import { PositionalError, Token } from '@src/parser';
 import { SyntaxTheme } from '@src/shared/syntax-theme';
 
-import { viewToken } from './view-token.tsx';
+import { viewToken, ViewTokenFn } from './view-token';
 
 interface TokenizedCodeViewProps {
     tokens: Token[];
@@ -25,10 +25,7 @@ export const TokenizedCodeView = forwardRef<HTMLPreElement, TokenizedCodeViewPro
     },
 );
 
-function highlightError(
-    viewToken: (token: Token, key: number | string) => ReactNode,
-    error: PositionalError | undefined,
-): (token: Token, key: number | string) => ReactNode {
+function highlightError(viewToken: ViewTokenFn, error: PositionalError | undefined): ViewTokenFn {
     if (!error) {
         return viewToken;
     }
