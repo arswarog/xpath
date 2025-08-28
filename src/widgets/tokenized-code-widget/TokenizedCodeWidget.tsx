@@ -18,6 +18,7 @@ const NON_BREAKING_SPACE_CODE_POINT = 160;
 
 export function TokenizedCodeWidget({ tokens, originalCode }: TokenizedCodeWidgetProps) {
     const [correctCode, setCorrectCode] = useState(false);
+    const [copied, setCopied] = useState(false);
     const codeRef = useRef<HTMLPreElement>(null);
 
     function getCode(): string {
@@ -35,8 +36,11 @@ export function TokenizedCodeWidget({ tokens, originalCode }: TokenizedCodeWidge
             const textToCopy = getCode();
             navigator.clipboard
                 .writeText(textToCopy)
-                .then(() => alert('Текст скопирован!'))
-                .catch(() => alert('Ошибка при копировании'));
+                .then(() => {
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 3000);
+                })
+                .catch(() => alert('Не удалось скопировать код в буфер обмена'));
         }
     };
 
@@ -57,7 +61,7 @@ export function TokenizedCodeWidget({ tokens, originalCode }: TokenizedCodeWidge
                     className={b('toolbar-item')}
                     onClick={copyCode}
                 >
-                    Copy
+                    {copied ? 'Copied!' : 'Copy'}
                 </button>
             </div>
             <TokenizedCodeView
