@@ -14,6 +14,8 @@ interface TokenizedCodeWidgetProps {
 
 const b = block(styles, 'TokenizedCodeWidget');
 
+const NON_BREAKING_SPACE_CODE_POINT = 160;
+
 export function TokenizedCodeWidget({ tokens, originalCode }: TokenizedCodeWidgetProps) {
     const [correctCode, setCorrectCode] = useState(false);
     const codeRef = useRef<HTMLPreElement>(null);
@@ -21,7 +23,7 @@ export function TokenizedCodeWidget({ tokens, originalCode }: TokenizedCodeWidge
     function getCode(): string {
         let result = codeRef.current?.innerText ?? '';
 
-        if (result.codePointAt(result.length - 1) === 160) {
+        if (result.codePointAt(result.length - 1) === NON_BREAKING_SPACE_CODE_POINT) {
             result = result.slice(0, -1);
         }
 
