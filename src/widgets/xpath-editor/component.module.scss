@@ -14,7 +14,7 @@
             font-family: 'Fira Code', monospace;
             font-size: 1.2rem;
             line-height: 1.5;
-            white-space: break-spaces;
+            white-space: pre-wrap;
             border: none;
         }
     }
@@ -35,7 +35,6 @@
         display: block;
 
         width: 100%;
-        min-height: 4em;
         font-size: 1.2rem;
 
         color: #d3d3d3;

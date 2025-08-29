@@ -19,7 +19,7 @@ export const TokenizedCodeView = forwardRef<HTMLPreElement, TokenizedCodeViewPro
                 padding="6px 12px"
                 ref={ref}
             >
-                {tokens.map(highlightError(viewToken, error))}
+                {tokens.map(highlightError(viewToken, error))}&nbsp;
             </SyntaxTheme>
         );
     },
