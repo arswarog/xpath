@@ -1,0 +1,15 @@
+{
+    "name": "Моё расширение DevTools",
+    "version": "1.0",
+    "icons": {
+        "84": "icon.png"
+    },
+    "devtools_page": "devtools.html",
+    "manifest_version": 3,
+    "permissions": [
+        "scripting"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ]
+}
