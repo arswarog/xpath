@@ -19,7 +19,7 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: path.resolve(__dirname, 'index.html'),
-                admin: path.resolve(__dirname, 'panel.html'),
+                devtoolsPanel: path.resolve(__dirname, 'devtools_panel.html'),
             },
         },
     },
