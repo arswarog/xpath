@@ -22,5 +22,13 @@ export default defineConfig({
                 devtoolsPanel: path.resolve(__dirname, 'devtools_panel.html'),
             },
         },
+        // Отключаем минимизацию для лучшей читаемости
+        minify: false,
+        // Включаем source maps
+        sourcemap: true,
+        // Включаем разбивку на чанки для лучшей отладки
+        // chunkSizeWarningLimit: 500, // увеличение лимита для больших чанков
+        // Для отладки можно настроить build output в формате es6 (для совместимости с браузерами)
+        target: 'esnext',
     },
 });

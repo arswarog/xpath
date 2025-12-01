@@ -1,28 +1,7 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-
-import { reatomContext } from '@reatom/npm-react';
-import { HashRouter } from 'react-router';
-
-import { App, ctx } from '@src/app';
-
-import './index.css';
-
-createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <reatomContext.Provider value={ctx}>
-            <HashRouter>
-                <App />
-            </HashRouter>
-        </reatomContext.Provider>
-    </StrictMode>,
-);
-
-// panel.js
-
 const debuggee = { tabId: chrome.devtools.inspectedWindow.tabId };
 let attached = false;
 
+// Подключение отладчика к вкладке
 function ensureAttached(callback) {
     if (attached) {
         return callback();
@@ -34,6 +13,34 @@ function ensureAttached(callback) {
         }
         attached = true;
         callback();
+    });
+}
+
+// Включаем DOM перед использованием Overlay
+function enableDOM(callback) {
+    chrome.debugger.sendCommand(debuggee, 'DOM.enable', {}, (response) => {
+        console.log(response);
+
+        if (chrome.runtime.lastError) {
+            console.error('Error enabling DOM:', chrome.runtime.lastError.message);
+            return;
+        }
+        callback();
+    });
+}
+
+// Включаем Overlay после DOM.enable
+function enableOverlay(callback) {
+    enableDOM(() => {
+        chrome.debugger.sendCommand(debuggee, 'Overlay.enable', {}, (response) => {
+            console.log(response);
+
+            if (chrome.runtime.lastError) {
+                console.error('Error enabling Overlay:', chrome.runtime.lastError.message);
+                return;
+            }
+            callback();
+        });
     });
 }
 
@@ -117,7 +124,7 @@ function fetchBoxesForXPath(xpath, cb) {
         debuggee,
         'Runtime.evaluate',
         { expression: expr, returnByValue: true },
-        (res) => {
+        (res: any) => {
             if (chrome.runtime.lastError) {
                 cb(null, chrome.runtime.lastError);
                 return;
@@ -159,7 +166,8 @@ function showOverlayForBoxes(boxes) {
             color: { r: c.r, g: c.g, b: c.b, a: c.a },
             outlineColor: c.outline,
         };
-        chrome.debugger.sendCommand(debuggee, 'Overlay.highlightRect', params, () => {
+        chrome.debugger.sendCommand(debuggee, 'Overlay.highlightRect', params, (data) => {
+            console.log(data);
             // игнорируем ошибки для отдельных прямоугольников
         });
     });
@@ -170,7 +178,7 @@ function hideOverlay() {
     chrome.debugger.sendCommand(debuggee, 'Overlay.hideHighlight', {}, () => {});
 }
 
-// Основная функция: подсветить все элементы по XPath так, как во вкладке Elements.
+// Основная функция для подсветки элементов по XPath
 function highlightByXPath(xpath) {
     ensureAttached(() => {
         // Перед отрисовкой скрываем старые подсветки
@@ -189,11 +197,29 @@ function highlightByXPath(xpath) {
     });
 }
 
-// Очистить
+// Очистка подсветки
 function clearHighlights() {
     hideOverlay();
 }
 
-// Пример использования (можно привязать к UI):
+// Пример использования
 clearHighlights();
-highlightByXPath('//div[@class="foo"]');
+highlightByXPath('//li[@class="_Navbar__item_1ai8p_11"]');
+
+// Пример использования с интервалом для отрисовки прямоугольников каждую секунду
+setInterval(() => {
+    ensureAttached(() => {
+        enableOverlay(() => {
+            showOverlayForBoxes([
+                {
+                    rect: {
+                        x: 10,
+                        y: 10,
+                        width: 100,
+                        height: 100,
+                    },
+                },
+            ]);
+        });
+    });
+}, 1000);
