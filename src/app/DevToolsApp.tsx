@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router';
 
-import { DevLayout } from '@src/pages/dev-layout';
+import { DevToolsLayout } from '@src/pages/devtools-layout';
 import { NodeSearchPage } from '@src/pages/node-search';
 
 import './App.css';
@@ -8,7 +8,7 @@ import './App.css';
 export function DevToolsApp() {
     return (
         <Routes>
-            <Route element={<DevLayout />}>
+            <Route element={<DevToolsLayout />}>
                 <Route
                     path="search"
                     element={<NodeSearchPage />}
