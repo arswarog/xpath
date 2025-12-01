@@ -15,4 +15,12 @@ export default defineConfig({
             '@src': path.resolve(__dirname, 'src'),
         },
     },
+    build: {
+        rollupOptions: {
+            input: {
+                main: path.resolve(__dirname, 'index.html'),
+                devtools: path.resolve(__dirname, 'devtools.html'),
+            },
+        },
+    },
 });
