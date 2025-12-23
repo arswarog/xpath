@@ -1,7 +1,8 @@
 import { atom } from '@reatom/framework';
 
-import { expressionAtom } from '@src/entities/expression';
 import { analyzeCode, HighlightedError, parse, PositionalError } from '@src/modules/xpath-parser';
+
+import { expressionAtom } from './expression.atom';
 
 export const astParsingErrorAtom = atom<HighlightedError | null>(null, 'astParsingErrorAtom');
 

@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 
 import { Token, TokenType } from '@src/modules/xpath-parser';
-import { SyntaxTheme, SyntaxThemeItem } from '@src/shared/syntax-theme';
+
+import { SyntaxTheme, SyntaxThemeItem } from '../../syntax-theme';
 
 const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
     [TokenType.UnknownSymbol]: SyntaxTheme.Error,
