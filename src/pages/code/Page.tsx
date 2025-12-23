@@ -1,9 +1,12 @@
 import { useAtom } from '@reatom/npm-react';
 
-import { expressionAtom } from '@src/entities/expression';
-import { astAtom, astParsingErrorAtom } from '@src/features/evaluate';
-import { ErrorView } from '@src/widgets/error-view';
-import { TokenizedCodeWidget } from '@src/widgets/tokenized-code-widget';
+import {
+    astAtom,
+    astParsingErrorAtom,
+    ErrorView,
+    expressionAtom,
+    TokenizedCodeWidget,
+} from '@src/modules/xpath-editor';
 
 export function CodePage() {
     const [expression] = useAtom(expressionAtom);

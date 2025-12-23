@@ -1,4 +1,5 @@
-import { PositionalError, Token } from '@src/parser';
+import { PositionalError } from '../common';
+import { Token } from '../lexer';
 
 export function checkUndefinedTokens(tokens: Token[]): void {
     const firstUndefinedTokenIndex = tokens.findIndex((token) => token === undefined);

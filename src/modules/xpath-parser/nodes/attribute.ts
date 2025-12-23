@@ -1,5 +1,4 @@
-import { PositionalError } from '@src/parser';
-
+import { PositionalError } from '../common';
 import { Token, TokenType } from '../lexer';
 
 import { AbstractNode, NodeType } from './abstract';
