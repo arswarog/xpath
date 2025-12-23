@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Token, TokenType } from '@src/parser';
+import { Token, TokenType } from '@src/modules/xpath-parser';
 import { SyntaxTheme, SyntaxThemeItem } from '@src/shared/syntax-theme';
 
 const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {

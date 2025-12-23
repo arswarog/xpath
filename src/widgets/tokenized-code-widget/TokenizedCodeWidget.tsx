@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import block from 'bem-css-modules';
 
 import { TokenizedCodeView } from '@src/features/tokenized-code-view';
-import { Token } from '@src/parser';
+import { Token } from '@src/modules/xpath-parser';
 
 import styles from './TokenizedCodeWidget.module.scss';
 

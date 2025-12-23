@@ -1,4 +1,4 @@
-import { RootNode } from '@src/parser';
+import { RootNode } from '@src/modules/xpath-parser';
 
 interface AstViewProps {
     ast: RootNode;

@@ -1,4 +1,4 @@
-import { Token, TokenType } from '@src/parser';
+import { Token, TokenType } from '@src/modules/xpath-parser';
 
 interface TokensViewProps {
     tokens: Token[];

@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 
-import { PositionalError, Token } from '@src/parser';
+import { PositionalError, Token } from '@src/modules/xpath-parser';
 import { SyntaxTheme } from '@src/shared/syntax-theme';
 
 import { viewToken, ViewTokenFn } from './view-token';

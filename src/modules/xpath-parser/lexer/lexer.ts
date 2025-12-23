@@ -1,4 +1,4 @@
-import { PositionalError } from '@src/parser';
+import { PositionalError } from '../common';
 
 import { createToken } from './create-token';
 import { TokenDeclaration, tokenDeclarations } from './tokens';
