@@ -1,7 +1,6 @@
 import { useAtom } from '@reatom/npm-react';
 
-import { tokensAtom } from '@src/features/evaluate';
-import { TokensView } from '@src/widgets/tokens-view';
+import { tokensAtom, TokensView } from '@src/modules/xpath-editor';
 
 export function TokensViewPage() {
     const [tokens] = useAtom(tokensAtom);

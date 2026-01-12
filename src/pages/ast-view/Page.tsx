@@ -1,8 +1,6 @@
 import { useAtom } from '@reatom/npm-react';
 
-import { astAtom, astParsingErrorAtom } from '@src/features/evaluate';
-import { AstView } from '@src/widgets/ast-view';
-import { ErrorView } from '@src/widgets/error-view';
+import { astAtom, astParsingErrorAtom, AstView, ErrorView } from '@src/modules/xpath-editor';
 
 export function AstViewPage() {
     const [ast] = useAtom(astAtom);

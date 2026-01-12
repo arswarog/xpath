@@ -2,8 +2,9 @@ import { useLayoutEffect, useRef } from 'react';
 
 import block from 'bem-css-modules';
 
-import { TokenizedCodeView } from '@src/features/tokenized-code-view';
-import { PositionalError, Token } from '@src/parser';
+import { PositionalError, Token } from '@src/modules/xpath-parser';
+
+import { TokenizedCodeView } from '../tokenized-code-view';
 
 import styles from './component.module.scss';
 

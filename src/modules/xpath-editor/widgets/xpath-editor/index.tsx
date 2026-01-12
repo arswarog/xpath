@@ -1,7 +1,11 @@
 import { useAction, useAtom } from '@reatom/npm-react';
 
-import { changeExpressionAction, expressionAtom } from '@src/entities/expression';
-import { astParsingErrorAtom, tokensAtom } from '@src/features/evaluate';
+import {
+    astParsingErrorAtom,
+    changeExpressionAction,
+    expressionAtom,
+    tokensAtom,
+} from '../../models';
 
 import { XPathEditorComponent } from './component.tsx';
 

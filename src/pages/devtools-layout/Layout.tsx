@@ -1,7 +1,7 @@
 import block from 'bem-css-modules';
 import { Outlet } from 'react-router';
 
-import { XPathEditor } from '@src/widgets/xpath-editor';
+import { XPathEditor } from '@src/modules/xpath-editor';
 
 import styles from './Layout.module.scss';
 const b = block(styles, 'DevToolsLayout');
