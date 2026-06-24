@@ -4,9 +4,8 @@ export type IframeSearchMode = 'all' | 'main' | 'specific';
 
 export interface IframeInfo {
     id: string;
-    name: string;
-    src?: string;
-    element?: HTMLIFrameElement;
+    name?: string;
+    isDefault?: boolean;
 }
 
 export interface IframeContext {
@@ -38,51 +37,33 @@ export const updateAvailableFramesAction = action((ctx, frames: IframeInfo[]) =>
 
 /**
  * Функция для получения списка iframe через Chrome Debugger API.
+ * Использует Runtime.getExecutionContexts для получения всех контекстов.
  * Должна вызываться из контекста DevTools.
  */
 export async function fetchAvailableFrames(): Promise<IframeInfo[]> {
     const debuggee = { tabId: chrome.devtools.inspectedWindow.tabId };
 
     return new Promise((resolve) => {
-        const getFramesExpr = `
-            (function() {
-                const frames = [];
-                const iframes = document.querySelectorAll('iframe');
-                iframes.forEach((frame, index) => {
-                    try {
-                        // Проверяем, доступен ли контент фрейма (same-origin)
-                        const hasAccess = frame.contentDocument != null;
-                        frames.push({
-                            id: frame.id || 'iframe-' + index,
-                            name: frame.name || '',
-                            src: frame.src || '',
-                            hasAccess: hasAccess
-                        });
-                    } catch (e) {
-                        // Cross-origin iframe - не можем получить доступ к содержимому
-                        frames.push({
-                            id: 'iframe-' + index,
-                            name: '',
-                            src: frame.src || '',
-                            hasAccess: false,
-                            crossOrigin: true
-                        });
-                    }
-                });
-                return frames;
-            })();
-        `;
-
         chrome.debugger.sendCommand(
             debuggee,
-            'Runtime.evaluate',
-            { expression: getFramesExpr, returnByValue: true },
+            'Runtime.getExecutionContexts',
+            {},
             (res: any) => {
-                if (chrome.runtime.lastError || !res?.result?.value) {
+                if (chrome.runtime.lastError || !res?.contexts) {
                     resolve([]);
                     return;
                 }
-                resolve(res.result.value || []);
+
+                const contexts = res.contexts || [];
+                const frames: IframeInfo[] = contexts
+                    .filter((ctx: any) => ctx.auxData?.frameId)
+                    .map((ctx: any) => ({
+                        id: ctx.auxData.frameId,
+                        name: ctx.name || '',
+                        isDefault: ctx.auxData.isDefault || false,
+                    }));
+
+                resolve(frames);
             },
         );
     });

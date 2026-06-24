@@ -8,11 +8,6 @@ export function NodeSearchPage() {
     const [expression] = useAtom(expressionAtom);
     const [iframeContext] = useAtom(iframeContextAtom);
 
-    console.log({
-        expression,
-        iframeContext,
-    })
-
     useEffect(() => {
         run(expression, iframeContext);
     }, [expression, iframeContext]);
@@ -74,23 +69,19 @@ function enableOverlay(callback) {
     });
 }
 
-// Вычислить набор прямоугольников (margin/padding/border/content) для каждого узла по XPath.
+// Вычислить набора прямоугольников (margin/padding/border/content) для каждого узла по XPath.
 // Возвращаем массив объектов {type: 'margin'|'border'|'padding'|'content', x,y,width,height, frameId?}
 function fetchBoxesForXPath(
     xpath: string,
     cb: (boxes: any[] | null, err: any | null) => void,
-    options: { searchInFrames?: boolean; specificFrameId?: string | null } = {
-        searchInFrames: true,
-    },
+    options: { searchInFrames?: boolean; specificFrameId?: string | null } = { searchInFrames: true },
 ) {
     const { searchInFrames = true, specificFrameId = null } = options;
-    console.log(xpath, options)
 
     // Функция для получения boxes из одного документа
     const getBoxesForDocument = (frameId: string | null = null) => {
-    const expr = `
+        const expr = `
         (function() {
-          console.log('Running XPath:', ${JSON.stringify(xpath)}, 'frameId: ', frameId);
           const xp = ${JSON.stringify(xpath)};
           function parsePx(v){ const f = parseFloat(v); return isNaN(f)?0:f; }
 
@@ -194,65 +185,31 @@ function fetchBoxesForXPath(
     }
 
     // Поиск во всех фреймах: основной документ + iframe
-    // Сначала получаем список всех фреймов
-    const getFramesExpr = `
-      (function() {
-        const frames = [];
-        const iframes = document.querySelectorAll('iframe');
-        iframes.forEach((frame, index) => {
-          try {
-            frames.push({
-              id: frame.id || 'iframe-' + index,
-              name: frame.name || '',
-              src: frame.src || '',
-              hasContent: frame.contentDocument != null
-            });
-          } catch (e) {
-            // Cross-origin iframe, cannot access
-            frames.push({
-              id: 'iframe-' + index,
-              name: '',
-              src: frame.src || '',
-              hasContent: false,
-              crossOrigin: true
-            });
-          }
-        });
-        return frames;
-      })();
-    `;
-
+    // Получаем все execution contexts
     chrome.debugger.sendCommand(
         debuggee,
-        'Runtime.evaluate',
-        { expression: getFramesExpr, returnByValue: true },
-        (framesRes: any) => {
+        'Runtime.getExecutionContexts',
+        {},
+        (contextsRes: any) => {
             if (chrome.runtime.lastError) {
                 cb(null, chrome.runtime.lastError);
                 return;
             }
 
-            const frames = framesRes?.result?.value || [];
+            const contexts = contextsRes?.contexts || [];
             const allBoxes: any[] = [];
+            let pending = contexts.length;
 
-            // Функция для сбора результатов со всех фреймов
-            const collectResults = (frameIndex: number) => {
-                if (frameIndex >= frames.length) {
-                    // Все фреймы обработаны, возвращаем результат
-                    cb(allBoxes, null);
-                    return;
-                }
+            if (pending === 0) {
+                cb([], null);
+                return;
+            }
 
-                const frame = frames[frameIndex];
-                const frameId = frame.id;
+            contexts.forEach((context: any) => {
+                // context.auxData?.frameId содержит ID фрейма
+                const frameId = context.auxData?.frameId || null;
 
-                // Если фрейм cross-origin, пропускаем его
-                if (frame.crossOrigin) {
-                    collectResults(frameIndex + 1);
-                    return;
-                }
-
-                // Выполняем XPath в контексте фрейма
+                // Выполняем XPath в каждом контексте
                 const expr = getBoxesForDocument(frameId);
                 chrome.debugger.sendCommand(
                     debuggee,
@@ -260,32 +217,19 @@ function fetchBoxesForXPath(
                     {
                         expression: expr,
                         returnByValue: true,
-                        contextId: frameId,
+                        contextId: context.id,
                     },
                     (res: any) => {
                         if (res?.result?.value) {
                             allBoxes.push(...res.result.value);
                         }
-                        // Переходим к следующему фрейму даже если ошибка
-                        collectResults(frameIndex + 1);
+                        pending--;
+                        if (pending === 0) {
+                            cb(allBoxes, null);
+                        }
                     },
                 );
-            };
-
-            // Сначала выполняем в основном документе
-            const mainExpr = getBoxesForDocument(null);
-            chrome.debugger.sendCommand(
-                debuggee,
-                'Runtime.evaluate',
-                { expression: mainExpr, returnByValue: true },
-                (mainRes: any) => {
-                    if (mainRes?.result?.value) {
-                        allBoxes.push(...mainRes.result.value);
-                    }
-                    // Затем выполняем во всех iframe
-                    collectResults(0);
-                },
-            );
+            });
         },
     );
 }

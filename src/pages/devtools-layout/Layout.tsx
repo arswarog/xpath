@@ -63,14 +63,14 @@ export function DevToolsLayout({ stickyEditor }: { stickyEditor?: boolean }) {
                         value={getSelectValue()}
                         onChange={handleFrameChange}
                     >
-                        <option value="all">All frames ({availableFrames.length + 1})</option>
-                        <option value="main">Main document only</option>
+                        <option value="all">All frames ({availableFrames.length})</option>
+                        <option value="main">Main frame only</option>
                         {availableFrames.map((frame) => (
                             <option
                                 key={frame.id}
                                 value={frame.id}
                             >
-                                {frame.name || frame.id || frame.src || 'iframe'}
+                                {frame.isDefault ? 'Main frame' : `Frame: ${frame.name || frame.id}`}
                             </option>
                         ))}
                     </select>
